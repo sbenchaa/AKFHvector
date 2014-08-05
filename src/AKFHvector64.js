@@ -21,20 +21,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-var AKFHvector = (function() {
+var AKFHvector = (function( ) {
     "use strict";
 
     var nbEntries = 1024;
-    var size = nbEntries * 4; //1024 * Float32Array.BYTES_PER_ELEMENT, min allocation is 4096
+    var size = nbEntries * 4; //1024 * Float64Array.BYTES_PER_ELEMENT, min allocation is 4096
     var buffer = new ArrayBuffer(size);
     var array = new Float64Array(buffer);
-
+	
     var AKFHvectorClass = function(stdlib, userlib, heap) {
         "use asm";
 
         // declaration of globals
-        var HEAPF64 = new stdlib.Float64Array(heap);
+        var HEAPF = new stdlib.Float64Array(heap);
         var pointer = 0;
 
         var sqrt = stdlib.Math.sqrt;
@@ -76,7 +75,7 @@ var AKFHvector = (function() {
             ptr = ptr | 0;
             index = index | 0;
             var n = 0.0;
-            n = +HEAPF64[ (ptr + index << 3) >> 3 ];
+            n = +HEAPF[ (ptr + index << 3) >> 3 ];
             if (n < 0.0)
                 return -1.0;
             if (n > 0.0)
@@ -89,12 +88,12 @@ var AKFHvector = (function() {
          *
          * @param {int} ptr
          * @param {int} index
-         * @returns {LinearClass.stdlib.Float32Array}
+         * @returns {LinearClass.stdlib.Float64Array}
          */
         function fetch(ptr, index) {
             ptr = ptr | 0;
             index = index | 0;
-            return +HEAPF64[ (ptr + index << 3) >> 3 ];
+            return +HEAPF[ (ptr + index << 3) >> 3 ];
         }
 
 /////////// Vector2
@@ -111,8 +110,8 @@ var AKFHvector = (function() {
             ptr = ptr | 0;
             x = +x;
             y = +y;
-            HEAPF64[ (ptr + 0 << 3) >> 3 ] = x; // shift must be 2 for 32bit 3 for 64bit
-            HEAPF64[ (ptr + 1 << 3) >> 3 ] = y;
+            HEAPF[ (ptr + 0 << 3) >> 3 ] = x; // shift must be 2 for 32bit 3 for 64bit
+            HEAPF[ (ptr + 1 << 3) >> 3 ] = y;
             return;
         }
 
@@ -120,8 +119,8 @@ var AKFHvector = (function() {
             ptr1 = ptr1 | 0;
             ptr2 = ptr2 | 0;
 
-            HEAPF64[ (ptr1 + 0 << 3) >> 3 ] = HEAPF64[ (ptr2 + 0 << 3) >> 3 ];
-            HEAPF64[ (ptr1 + 1 << 3) >> 3 ] = HEAPF64[ (ptr2 + 1 << 3) >> 3 ];
+            HEAPF[ (ptr1 + 0 << 3) >> 3 ] = HEAPF[ (ptr2 + 0 << 3) >> 3 ];
+            HEAPF[ (ptr1 + 1 << 3) >> 3 ] = HEAPF[ (ptr2 + 1 << 3) >> 3 ];
         }
 
         /**
@@ -152,8 +151,8 @@ var AKFHvector = (function() {
             ptr2 = ptr2 | 0;
             var a = 0;
             var b = 0;
-            a = (+HEAPF64[ (ptr1 + 0 << 3) >> 3 ] == +HEAPF64[ (ptr2 + 0 << 3) >> 3 ]) | 0;
-            b = (+HEAPF64[ (ptr1 + 1 << 3) >> 3 ] == +HEAPF64[ (ptr2 + 1 << 3) >> 3 ]) | 0;
+            a = (+HEAPF[ (ptr1 + 0 << 3) >> 3 ] == +HEAPF[ (ptr2 + 0 << 3) >> 3 ]) | 0;
+            b = (+HEAPF[ (ptr1 + 1 << 3) >> 3 ] == +HEAPF[ (ptr2 + 1 << 3) >> 3 ]) | 0;
             return  ((a | 0) & (b | 0)) | 0;
         }
 
@@ -170,8 +169,8 @@ var AKFHvector = (function() {
             ptr2 = ptr2 | 0;
             var a = 0;
             var b = 0;
-            a = (+HEAPF64[ (ptr1 + 0 << 3) >> 3 ] <= +HEAPF64[ (ptr2 + 0 << 3) >> 3 ]) | 0;
-            b = (+HEAPF64[ (ptr1 + 1 << 3) >> 3 ] <= +HEAPF64[ (ptr2 + 1 << 3) >> 3 ]) | 0;
+            a = (+HEAPF[ (ptr1 + 0 << 3) >> 3 ] <= +HEAPF[ (ptr2 + 0 << 3) >> 3 ]) | 0;
+            b = (+HEAPF[ (ptr1 + 1 << 3) >> 3 ] <= +HEAPF[ (ptr2 + 1 << 3) >> 3 ]) | 0;
             return  ((a | 0) & (b | 0)) | 0;
         }
 
@@ -188,8 +187,8 @@ var AKFHvector = (function() {
             ptr2 = ptr2 | 0;
             var a = 0;
             var b = 0;
-            a = (+HEAPF64[ (ptr1 + 0 << 3) >> 3 ] >= +HEAPF64[ (ptr2 + 0 << 3) >> 3 ]) | 0;
-            b = (+HEAPF64[ (ptr1 + 1 << 3) >> 3 ] >= +HEAPF64[ (ptr2 + 1 << 3) >> 3 ]) | 0;
+            a = (+HEAPF[ (ptr1 + 0 << 3) >> 3 ] >= +HEAPF[ (ptr2 + 0 << 3) >> 3 ]) | 0;
+            b = (+HEAPF[ (ptr1 + 1 << 3) >> 3 ] >= +HEAPF[ (ptr2 + 1 << 3) >> 3 ]) | 0;
             return  ((a | 0) & (b | 0)) | 0;
         }
 
@@ -204,8 +203,8 @@ var AKFHvector = (function() {
         function addVec2(ptr1, ptr2) {
             ptr1 = ptr1 | 0;
             ptr2 = ptr2 | 0;
-            HEAPF64[ (ptr1 + 0 << 3) >> 3 ] = HEAPF64[ (ptr1 + 0 << 3) >> 3 ] + HEAPF64[ (ptr2 + 0 << 3) >> 3 ];
-            HEAPF64[ (ptr1 + 1 << 3) >> 3 ] = HEAPF64[ (ptr1 + 1 << 3) >> 3 ] + HEAPF64[ (ptr2 + 1 << 3) >> 3 ];
+            HEAPF[ (ptr1 + 0 << 3) >> 3 ] = HEAPF[ (ptr1 + 0 << 3) >> 3 ] + HEAPF[ (ptr2 + 0 << 3) >> 3 ];
+            HEAPF[ (ptr1 + 1 << 3) >> 3 ] = HEAPF[ (ptr1 + 1 << 3) >> 3 ] + HEAPF[ (ptr2 + 1 << 3) >> 3 ];
             return;
         }
 
@@ -220,8 +219,8 @@ var AKFHvector = (function() {
         function addVec2Scalar(ptr1, v) {
             ptr1 = ptr1 | 0;
             v = +v;
-            HEAPF64[ (ptr1 + 0 << 3) >> 3 ] = +HEAPF64[ (ptr1 + 0 << 3) >> 3 ] + v;
-            HEAPF64[ (ptr1 + 1 << 3) >> 3 ] = +HEAPF64[ (ptr1 + 1 << 3) >> 3 ] + v;
+            HEAPF[ (ptr1 + 0 << 3) >> 3 ] = +HEAPF[ (ptr1 + 0 << 3) >> 3 ] + v;
+            HEAPF[ (ptr1 + 1 << 3) >> 3 ] = +HEAPF[ (ptr1 + 1 << 3) >> 3 ] + v;
             return;
         }
 
@@ -236,8 +235,8 @@ var AKFHvector = (function() {
         function subVec2(ptr1, ptr2) {
             ptr1 = ptr1 | 0;
             ptr2 = ptr2 | 0;
-            HEAPF64[ (ptr1 + 0 << 3) >> 3 ] = HEAPF64[ (ptr1 + 0 << 3) >> 3 ] - HEAPF64[ (ptr2 + 0 << 3) >> 3 ];
-            HEAPF64[ (ptr1 + 1 << 3) >> 3 ] = HEAPF64[ (ptr1 + 1 << 3) >> 3 ] - HEAPF64[ (ptr2 + 1 << 3) >> 3 ];
+            HEAPF[ (ptr1 + 0 << 3) >> 3 ] = HEAPF[ (ptr1 + 0 << 3) >> 3 ] - HEAPF[ (ptr2 + 0 << 3) >> 3 ];
+            HEAPF[ (ptr1 + 1 << 3) >> 3 ] = HEAPF[ (ptr1 + 1 << 3) >> 3 ] - HEAPF[ (ptr2 + 1 << 3) >> 3 ];
             return;
         }
 
@@ -252,8 +251,8 @@ var AKFHvector = (function() {
         function subVec2Scalar(ptr1, v) {
             ptr1 = ptr1 | 0;
             v = +v;
-            HEAPF64[ (ptr1 + 0 << 3) >> 3 ] = +HEAPF64[ (ptr1 + 0 << 3) >> 3 ] - v;
-            HEAPF64[ (ptr1 + 1 << 3) >> 3 ] = +HEAPF64[ (ptr1 + 1 << 3) >> 3 ] - v;
+            HEAPF[ (ptr1 + 0 << 3) >> 3 ] = +HEAPF[ (ptr1 + 0 << 3) >> 3 ] - v;
+            HEAPF[ (ptr1 + 1 << 3) >> 3 ] = +HEAPF[ (ptr1 + 1 << 3) >> 3 ] - v;
             return;
         }
 
@@ -268,8 +267,8 @@ var AKFHvector = (function() {
         function mulVec2(ptr1, ptr2) {
             ptr1 = ptr1 | 0;
             ptr2 = ptr2 | 0;
-            HEAPF64[ (ptr1 + 0 << 3) >> 3 ] = HEAPF64[ (ptr1 + 0 << 3) >> 3 ] * HEAPF64[ (ptr2 + 0 << 3) >> 3 ];
-            HEAPF64[ (ptr1 + 1 << 3) >> 3 ] = HEAPF64[ (ptr1 + 1 << 3) >> 3 ] * HEAPF64[ (ptr2 + 1 << 3) >> 3 ];
+            HEAPF[ (ptr1 + 0 << 3) >> 3 ] = HEAPF[ (ptr1 + 0 << 3) >> 3 ] * HEAPF[ (ptr2 + 0 << 3) >> 3 ];
+            HEAPF[ (ptr1 + 1 << 3) >> 3 ] = HEAPF[ (ptr1 + 1 << 3) >> 3 ] * HEAPF[ (ptr2 + 1 << 3) >> 3 ];
             return;
         }
 
@@ -284,8 +283,8 @@ var AKFHvector = (function() {
         function mulVec2Scalar(ptr1, v) {
             ptr1 = ptr1 | 0;
             v = +v;
-            HEAPF64[ (ptr1 + 0 << 3) >> 3 ] = +HEAPF64[ (ptr1 + 0 << 3) >> 3 ] * v;
-            HEAPF64[ (ptr1 + 1 << 3) >> 3 ] = +HEAPF64[ (ptr1 + 1 << 3) >> 3 ] * v;
+            HEAPF[ (ptr1 + 0 << 3) >> 3 ] = +HEAPF[ (ptr1 + 0 << 3) >> 3 ] * v;
+            HEAPF[ (ptr1 + 1 << 3) >> 3 ] = +HEAPF[ (ptr1 + 1 << 3) >> 3 ] * v;
             return;
         }
 
@@ -300,8 +299,8 @@ var AKFHvector = (function() {
         function divVec2(ptr1, ptr2) {
             ptr1 = ptr1 | 0;
             ptr2 = ptr2 | 0;
-            HEAPF64[ (ptr1 + 0 << 3) >> 3 ] = HEAPF64[ (ptr1 + 0 << 3) >> 3 ] / HEAPF64[ (ptr2 + 0 << 3) >> 3 ];
-            HEAPF64[ (ptr1 + 1 << 3) >> 3 ] = HEAPF64[ (ptr1 + 1 << 3) >> 3 ] / HEAPF64[ (ptr2 + 1 << 3) >> 3 ];
+            HEAPF[ (ptr1 + 0 << 3) >> 3 ] = HEAPF[ (ptr1 + 0 << 3) >> 3 ] / HEAPF[ (ptr2 + 0 << 3) >> 3 ];
+            HEAPF[ (ptr1 + 1 << 3) >> 3 ] = HEAPF[ (ptr1 + 1 << 3) >> 3 ] / HEAPF[ (ptr2 + 1 << 3) >> 3 ];
             return;
         }
 
@@ -316,8 +315,8 @@ var AKFHvector = (function() {
         function divVec2Scalar(ptr1, v) {
             ptr1 = ptr1 | 0;
             v = +v;
-            HEAPF64[ (ptr1 + 0 << 3) >> 3 ] = +HEAPF64[ (ptr1 + 0 << 3) >> 3 ] / v;
-            HEAPF64[ (ptr1 + 1 << 3) >> 3 ] = +HEAPF64[ (ptr1 + 1 << 3) >> 3 ] / v;
+            HEAPF[ (ptr1 + 0 << 3) >> 3 ] = +HEAPF[ (ptr1 + 0 << 3) >> 3 ] / v;
+            HEAPF[ (ptr1 + 1 << 3) >> 3 ] = +HEAPF[ (ptr1 + 1 << 3) >> 3 ] / v;
             return;
         }
 
@@ -334,16 +333,16 @@ var AKFHvector = (function() {
             ptr1 = ptr1 | 0;
             var x = 0.0;
             var y = 0.0;
-            x = +HEAPF64[ (ptr1 + 0 << 3) >> 3 ];
-            y = +HEAPF64[ (ptr1 + 1 << 3) >> 3 ];
+            x = +HEAPF[ (ptr1 + 0 << 3) >> 3 ];
+            y = +HEAPF[ (ptr1 + 1 << 3) >> 3 ];
             if (x > 0.0)
-                HEAPF64[ (ptr1 + 0 << 3) >> 3 ] = +(~~x);
+                HEAPF[ (ptr1 + 0 << 3) >> 3 ] = +(~~x);
             else
-                HEAPF64[ (ptr1 + 0 << 3) >> 3 ] = +(~~(x - +(~~(-1.0 - (x % 1.0))) - 1.0));
+                HEAPF[ (ptr1 + 0 << 3) >> 3 ] = +(~~(x - +(~~(-1.0 - (x % 1.0))) - 1.0));
             if (y > 0.0)
-                HEAPF64[ (ptr1 + 1 << 3) >> 3 ] = +(~~y);
+                HEAPF[ (ptr1 + 1 << 3) >> 3 ] = +(~~y);
             else
-                HEAPF64[ (ptr1 + 1 << 3) >> 3 ] = +(~~(y - +(~~(-1.0 - (y % 1.0))) - 1.0));
+                HEAPF[ (ptr1 + 1 << 3) >> 3 ] = +(~~(y - +(~~(-1.0 - (y % 1.0))) - 1.0));
             return;
         }
 
@@ -360,16 +359,16 @@ var AKFHvector = (function() {
             ptr1 = ptr1 | 0;
             var x = 0.0;
             var y = 0.0;
-            x = +HEAPF64[ (ptr1 + 0 << 3) >> 3 ];
-            y = +HEAPF64[ (ptr1 + 1 << 3) >> 3 ];
+            x = +HEAPF[ (ptr1 + 0 << 3) >> 3 ];
+            y = +HEAPF[ (ptr1 + 1 << 3) >> 3 ];
             if (x > 0.0)
-                HEAPF64[ (ptr1 + 0 << 3) >> 3 ] = +(~~x) + 1.0;
+                HEAPF[ (ptr1 + 0 << 3) >> 3 ] = +(~~x) + 1.0;
             else
-                HEAPF64[ (ptr1 + 0 << 3) >> 3 ] = +(~~(x - +(~~(-1.0 + (x % 1.0))) - 1.0));
+                HEAPF[ (ptr1 + 0 << 3) >> 3 ] = +(~~(x - +(~~(-1.0 + (x % 1.0))) - 1.0));
             if (y > 0.0)
-                HEAPF64[ (ptr1 + 1 << 3) >> 3 ] = +(~~y) + 1.0;
+                HEAPF[ (ptr1 + 1 << 3) >> 3 ] = +(~~y) + 1.0;
             else
-                HEAPF64[ (ptr1 + 1 << 3) >> 3 ] = +(~~(y - +(~~(-1.0 + (y % 1.0))) - 1.0));
+                HEAPF[ (ptr1 + 1 << 3) >> 3 ] = +(~~(y - +(~~(-1.0 + (y % 1.0))) - 1.0));
             return;
         }
 
@@ -383,8 +382,8 @@ var AKFHvector = (function() {
          */
         function negateVec2(ptr1) {
             ptr1 = ptr1 | 0;
-            HEAPF64[ (ptr1 + 0 << 3) >> 3 ] = -(+HEAPF64[ (ptr1 + 0 << 3) >> 3 ]);
-            HEAPF64[ (ptr1 + 1 << 3) >> 3 ] = -(+HEAPF64[ (ptr1 + 1 << 3) >> 3 ]);
+            HEAPF[ (ptr1 + 0 << 3) >> 3 ] = -(+HEAPF[ (ptr1 + 0 << 3) >> 3 ]);
+            HEAPF[ (ptr1 + 1 << 3) >> 3 ] = -(+HEAPF[ (ptr1 + 1 << 3) >> 3 ]);
             return;
         }
 
@@ -402,8 +401,8 @@ var AKFHvector = (function() {
             var ab0 = 0.0;
             var ab1 = 0.0;
             var ab2 = 0.0;
-            ab0 = +HEAPF64[ (ptr1 + 0 << 3) >> 3 ] * +HEAPF64[ (ptr2 + 0 << 3) >> 3 ];
-            ab1 = +HEAPF64[ (ptr1 + 1 << 3) >> 3 ] * +HEAPF64[ (ptr2 + 1 << 3) >> 3 ];
+            ab0 = +HEAPF[ (ptr1 + 0 << 3) >> 3 ] * +HEAPF[ (ptr2 + 0 << 3) >> 3 ];
+            ab1 = +HEAPF[ (ptr1 + 1 << 3) >> 3 ] * +HEAPF[ (ptr2 + 1 << 3) >> 3 ];
             return +(ab0 + ab1);
         }
 
@@ -422,10 +421,10 @@ var AKFHvector = (function() {
             var ay = 0.0;
             var bx = 0.0;
             var by = 0.0;
-            ax = +HEAPF64[ (ptr1 + 0 << 3) >> 3 ];
-            ay = +HEAPF64[ (ptr1 + 1 << 3) >> 3 ];
-            bx = +HEAPF64[ (ptr2 + 0 << 3) >> 3 ];
-            by = +HEAPF64[ (ptr2 + 1 << 3) >> 3 ];
+            ax = +HEAPF[ (ptr1 + 0 << 3) >> 3 ];
+            ay = +HEAPF[ (ptr1 + 1 << 3) >> 3 ];
+            bx = +HEAPF[ (ptr2 + 0 << 3) >> 3 ];
+            by = +HEAPF[ (ptr2 + 1 << 3) >> 3 ];
 
             return +(ax * by - ay * bx);
         }
@@ -445,11 +444,11 @@ var AKFHvector = (function() {
             v = +v;
             var bSa0 = 0.0;
             var bSa1 = 0.0;
-            bSa0 = +HEAPF64[ (ptr2 + 0 << 3) >> 3 ] - +HEAPF64[ (ptr1 + 0 << 3) >> 3 ];
-            bSa1 = +HEAPF64[ (ptr2 + 1 << 3) >> 3 ] - +HEAPF64[ (ptr1 + 1 << 3) >> 3 ];
+            bSa0 = +HEAPF[ (ptr2 + 0 << 3) >> 3 ] - +HEAPF[ (ptr1 + 0 << 3) >> 3 ];
+            bSa1 = +HEAPF[ (ptr2 + 1 << 3) >> 3 ] - +HEAPF[ (ptr1 + 1 << 3) >> 3 ];
 
-            HEAPF64[ (ptr1 + 0 << 3) >> 3 ] = +HEAPF64[ (ptr1 + 0 << 3) >> 3 ] + bSa0 * v;
-            HEAPF64[ (ptr1 + 1 << 3) >> 3 ] = +HEAPF64[ (ptr1 + 1 << 3) >> 3 ] + bSa1 * v;
+            HEAPF[ (ptr1 + 0 << 3) >> 3 ] = +HEAPF[ (ptr1 + 0 << 3) >> 3 ] + bSa0 * v;
+            HEAPF[ (ptr1 + 1 << 3) >> 3 ] = +HEAPF[ (ptr1 + 1 << 3) >> 3 ] + bSa1 * v;
             return;
         }
 
@@ -485,8 +484,8 @@ var AKFHvector = (function() {
         function distanceVec2(ptr1, ptr2) {
             ptr1 = ptr1 | 0;
             ptr2 = ptr2 | 0;
-            HEAPF64[ (ptr1 + 0 << 3) >> 3 ] = +HEAPF64[ (ptr2 + 0 << 3) >> 3 ] - +HEAPF64[ (ptr1 + 0 << 3) >> 3 ];
-            HEAPF64[ (ptr1 + 1 << 3) >> 3 ] = +HEAPF64[ (ptr2 + 1 << 3) >> 3 ] - +HEAPF64[ (ptr1 + 1 << 3) >> 3 ];
+            HEAPF[ (ptr1 + 0 << 3) >> 3 ] = +HEAPF[ (ptr2 + 0 << 3) >> 3 ] - +HEAPF[ (ptr1 + 0 << 3) >> 3 ];
+            HEAPF[ (ptr1 + 1 << 3) >> 3 ] = +HEAPF[ (ptr2 + 1 << 3) >> 3 ] - +HEAPF[ (ptr1 + 1 << 3) >> 3 ];
             return +lengthVec2(ptr1);
         }
 
@@ -498,8 +497,8 @@ var AKFHvector = (function() {
          */
         function lengthManVec2(ptr) {
             ptr = ptr | 0;
-            return +(+abs(+HEAPF64[ (ptr + 0 << 3) >> 3 ]) +
-                    +abs(+HEAPF64[ (ptr + 1 << 3) >> 3 ]));
+            return +(+abs(+HEAPF[ (ptr + 0 << 3) >> 3 ]) +
+                    +abs(+HEAPF[ (ptr + 1 << 3) >> 3 ]));
         }
 
         /**
@@ -531,9 +530,9 @@ var AKFHvector = (function() {
             x = +x;
             y = +y;
             z = +z;
-            HEAPF64[ (ptr + 0 << 3) >> 3 ] = x; // shift must be 2 for 32bit 3 for 64bit
-            HEAPF64[ (ptr + 1 << 3) >> 3 ] = y;
-            HEAPF64[ (ptr + 2 << 3) >> 3 ] = z;
+            HEAPF[ (ptr + 0 << 3) >> 3 ] = x; // shift must be 2 for 32bit 3 for 64bit
+            HEAPF[ (ptr + 1 << 3) >> 3 ] = y;
+            HEAPF[ (ptr + 2 << 3) >> 3 ] = z;
             return;
         }
 
@@ -541,9 +540,9 @@ var AKFHvector = (function() {
             ptr1 = ptr1 | 0;
             ptr2 = ptr2 | 0;
 
-            HEAPF64[ (ptr1 + 0 << 3) >> 3 ] = HEAPF64[ (ptr2 + 0 << 3) >> 3 ];
-            HEAPF64[ (ptr1 + 1 << 3) >> 3 ] = HEAPF64[ (ptr2 + 1 << 3) >> 3 ];
-            HEAPF64[ (ptr1 + 2 << 3) >> 3 ] = HEAPF64[ (ptr2 + 2 << 3) >> 3 ];
+            HEAPF[ (ptr1 + 0 << 3) >> 3 ] = HEAPF[ (ptr2 + 0 << 3) >> 3 ];
+            HEAPF[ (ptr1 + 1 << 3) >> 3 ] = HEAPF[ (ptr2 + 1 << 3) >> 3 ];
+            HEAPF[ (ptr1 + 2 << 3) >> 3 ] = HEAPF[ (ptr2 + 2 << 3) >> 3 ];
         }
 
         /**
@@ -576,9 +575,9 @@ var AKFHvector = (function() {
             var a = 0;
             var b = 0;
             var c = 0;
-            a = (+HEAPF64[ (ptr1 + 0 << 3) >> 3 ] == +HEAPF64[ (ptr2 + 0 << 3) >> 3 ]) | 0;
-            b = (+HEAPF64[ (ptr1 + 1 << 3) >> 3 ] == +HEAPF64[ (ptr2 + 1 << 3) >> 3 ]) | 0;
-            c = (+HEAPF64[ (ptr1 + 2 << 3) >> 3 ] == +HEAPF64[ (ptr2 + 2 << 3) >> 3 ]) | 0;
+            a = (+HEAPF[ (ptr1 + 0 << 3) >> 3 ] == +HEAPF[ (ptr2 + 0 << 3) >> 3 ]) | 0;
+            b = (+HEAPF[ (ptr1 + 1 << 3) >> 3 ] == +HEAPF[ (ptr2 + 1 << 3) >> 3 ]) | 0;
+            c = (+HEAPF[ (ptr1 + 2 << 3) >> 3 ] == +HEAPF[ (ptr2 + 2 << 3) >> 3 ]) | 0;
             return  ((a | 0) & (b | 0) & (c | 0)) | 0;
         }
 
@@ -596,9 +595,9 @@ var AKFHvector = (function() {
             var a = 0;
             var b = 0;
             var c = 0;
-            a = (+HEAPF64[ (ptr1 + 0 << 3) >> 3 ] <= +HEAPF64[ (ptr2 + 0 << 3) >> 3 ]) | 0;
-            b = (+HEAPF64[ (ptr1 + 1 << 3) >> 3 ] <= +HEAPF64[ (ptr2 + 1 << 3) >> 3 ]) | 0;
-            c = (+HEAPF64[ (ptr1 + 2 << 3) >> 3 ] <= +HEAPF64[ (ptr2 + 2 << 3) >> 3 ]) | 0;
+            a = (+HEAPF[ (ptr1 + 0 << 3) >> 3 ] <= +HEAPF[ (ptr2 + 0 << 3) >> 3 ]) | 0;
+            b = (+HEAPF[ (ptr1 + 1 << 3) >> 3 ] <= +HEAPF[ (ptr2 + 1 << 3) >> 3 ]) | 0;
+            c = (+HEAPF[ (ptr1 + 2 << 3) >> 3 ] <= +HEAPF[ (ptr2 + 2 << 3) >> 3 ]) | 0;
             return  ((a | 0) & (b | 0) & (c | 0)) | 0;
         }
 
@@ -616,9 +615,9 @@ var AKFHvector = (function() {
             var a = 0;
             var b = 0;
             var c = 0;
-            a = (+HEAPF64[ (ptr1 + 0 << 3) >> 3 ] >= +HEAPF64[ (ptr2 + 0 << 3) >> 3 ]) | 0;
-            b = (+HEAPF64[ (ptr1 + 1 << 3) >> 3 ] >= +HEAPF64[ (ptr2 + 1 << 3) >> 3 ]) | 0;
-            c = (+HEAPF64[ (ptr1 + 2 << 3) >> 3 ] >= +HEAPF64[ (ptr2 + 2 << 3) >> 3 ]) | 0;
+            a = (+HEAPF[ (ptr1 + 0 << 3) >> 3 ] >= +HEAPF[ (ptr2 + 0 << 3) >> 3 ]) | 0;
+            b = (+HEAPF[ (ptr1 + 1 << 3) >> 3 ] >= +HEAPF[ (ptr2 + 1 << 3) >> 3 ]) | 0;
+            c = (+HEAPF[ (ptr1 + 2 << 3) >> 3 ] >= +HEAPF[ (ptr2 + 2 << 3) >> 3 ]) | 0;
             return  ((a | 0) & (b | 0) & (c | 0)) | 0;
         }
 
@@ -633,9 +632,9 @@ var AKFHvector = (function() {
         function addVec3(ptr1, ptr2) {
             ptr1 = ptr1 | 0;
             ptr2 = ptr2 | 0;
-            HEAPF64[ (ptr1 + 0 << 3) >> 3 ] = HEAPF64[ (ptr1 + 0 << 3) >> 3 ] + HEAPF64[ (ptr2 + 0 << 3) >> 3 ];
-            HEAPF64[ (ptr1 + 1 << 3) >> 3 ] = HEAPF64[ (ptr1 + 1 << 3) >> 3 ] + HEAPF64[ (ptr2 + 1 << 3) >> 3 ];
-            HEAPF64[ (ptr1 + 2 << 3) >> 3 ] = HEAPF64[ (ptr1 + 2 << 3) >> 3 ] + HEAPF64[ (ptr2 + 2 << 3) >> 3 ];
+            HEAPF[ (ptr1 + 0 << 3) >> 3 ] = HEAPF[ (ptr1 + 0 << 3) >> 3 ] + HEAPF[ (ptr2 + 0 << 3) >> 3 ];
+            HEAPF[ (ptr1 + 1 << 3) >> 3 ] = HEAPF[ (ptr1 + 1 << 3) >> 3 ] + HEAPF[ (ptr2 + 1 << 3) >> 3 ];
+            HEAPF[ (ptr1 + 2 << 3) >> 3 ] = HEAPF[ (ptr1 + 2 << 3) >> 3 ] + HEAPF[ (ptr2 + 2 << 3) >> 3 ];
             return;
         }
 
@@ -650,9 +649,9 @@ var AKFHvector = (function() {
         function addVec3Scalar(ptr1, v) {
             ptr1 = ptr1 | 0;
             v = +v;
-            HEAPF64[ (ptr1 + 0 << 3) >> 3 ] = +HEAPF64[ (ptr1 + 0 << 3) >> 3 ] + v;
-            HEAPF64[ (ptr1 + 1 << 3) >> 3 ] = +HEAPF64[ (ptr1 + 1 << 3) >> 3 ] + v;
-            HEAPF64[ (ptr1 + 2 << 3) >> 3 ] = +HEAPF64[ (ptr1 + 2 << 3) >> 3 ] + v;
+            HEAPF[ (ptr1 + 0 << 3) >> 3 ] = +HEAPF[ (ptr1 + 0 << 3) >> 3 ] + v;
+            HEAPF[ (ptr1 + 1 << 3) >> 3 ] = +HEAPF[ (ptr1 + 1 << 3) >> 3 ] + v;
+            HEAPF[ (ptr1 + 2 << 3) >> 3 ] = +HEAPF[ (ptr1 + 2 << 3) >> 3 ] + v;
             return;
         }
 
@@ -667,9 +666,9 @@ var AKFHvector = (function() {
         function subVec3(ptr1, ptr2) {
             ptr1 = ptr1 | 0;
             ptr2 = ptr2 | 0;
-            HEAPF64[ (ptr1 + 0 << 3) >> 3 ] = HEAPF64[ (ptr1 + 0 << 3) >> 3 ] - HEAPF64[ (ptr2 + 0 << 3) >> 3 ];
-            HEAPF64[ (ptr1 + 1 << 3) >> 3 ] = HEAPF64[ (ptr1 + 1 << 3) >> 3 ] - HEAPF64[ (ptr2 + 1 << 3) >> 3 ];
-            HEAPF64[ (ptr1 + 2 << 3) >> 3 ] = HEAPF64[ (ptr1 + 2 << 3) >> 3 ] - HEAPF64[ (ptr2 + 2 << 3) >> 3 ];
+            HEAPF[ (ptr1 + 0 << 3) >> 3 ] = HEAPF[ (ptr1 + 0 << 3) >> 3 ] - HEAPF[ (ptr2 + 0 << 3) >> 3 ];
+            HEAPF[ (ptr1 + 1 << 3) >> 3 ] = HEAPF[ (ptr1 + 1 << 3) >> 3 ] - HEAPF[ (ptr2 + 1 << 3) >> 3 ];
+            HEAPF[ (ptr1 + 2 << 3) >> 3 ] = HEAPF[ (ptr1 + 2 << 3) >> 3 ] - HEAPF[ (ptr2 + 2 << 3) >> 3 ];
             return;
         }
 
@@ -684,9 +683,9 @@ var AKFHvector = (function() {
         function subVec3Scalar(ptr1, v) {
             ptr1 = ptr1 | 0;
             v = +v;
-            HEAPF64[ (ptr1 + 0 << 3) >> 3 ] = +HEAPF64[ (ptr1 + 0 << 3) >> 3 ] - v;
-            HEAPF64[ (ptr1 + 1 << 3) >> 3 ] = +HEAPF64[ (ptr1 + 1 << 3) >> 3 ] - v;
-            HEAPF64[ (ptr1 + 2 << 3) >> 3 ] = +HEAPF64[ (ptr1 + 2 << 3) >> 3 ] - v;
+            HEAPF[ (ptr1 + 0 << 3) >> 3 ] = +HEAPF[ (ptr1 + 0 << 3) >> 3 ] - v;
+            HEAPF[ (ptr1 + 1 << 3) >> 3 ] = +HEAPF[ (ptr1 + 1 << 3) >> 3 ] - v;
+            HEAPF[ (ptr1 + 2 << 3) >> 3 ] = +HEAPF[ (ptr1 + 2 << 3) >> 3 ] - v;
             return;
         }
 
@@ -701,9 +700,9 @@ var AKFHvector = (function() {
         function mulVec3(ptr1, ptr2) {
             ptr1 = ptr1 | 0;
             ptr2 = ptr2 | 0;
-            HEAPF64[ (ptr1 + 0 << 3) >> 3 ] = HEAPF64[ (ptr1 + 0 << 3) >> 3 ] * HEAPF64[ (ptr2 + 0 << 3) >> 3 ];
-            HEAPF64[ (ptr1 + 1 << 3) >> 3 ] = HEAPF64[ (ptr1 + 1 << 3) >> 3 ] * HEAPF64[ (ptr2 + 1 << 3) >> 3 ];
-            HEAPF64[ (ptr1 + 2 << 3) >> 3 ] = HEAPF64[ (ptr1 + 2 << 3) >> 3 ] * HEAPF64[ (ptr2 + 2 << 3) >> 3 ];
+            HEAPF[ (ptr1 + 0 << 3) >> 3 ] = HEAPF[ (ptr1 + 0 << 3) >> 3 ] * HEAPF[ (ptr2 + 0 << 3) >> 3 ];
+            HEAPF[ (ptr1 + 1 << 3) >> 3 ] = HEAPF[ (ptr1 + 1 << 3) >> 3 ] * HEAPF[ (ptr2 + 1 << 3) >> 3 ];
+            HEAPF[ (ptr1 + 2 << 3) >> 3 ] = HEAPF[ (ptr1 + 2 << 3) >> 3 ] * HEAPF[ (ptr2 + 2 << 3) >> 3 ];
             return;
         }
 
@@ -718,9 +717,9 @@ var AKFHvector = (function() {
         function mulVec3Scalar(ptr1, v) {
             ptr1 = ptr1 | 0;
             v = +v;
-            HEAPF64[ (ptr1 + 0 << 3) >> 3 ] = +HEAPF64[ (ptr1 + 0 << 3) >> 3 ] * v;
-            HEAPF64[ (ptr1 + 1 << 3) >> 3 ] = +HEAPF64[ (ptr1 + 1 << 3) >> 3 ] * v;
-            HEAPF64[ (ptr1 + 2 << 3) >> 3 ] = +HEAPF64[ (ptr1 + 2 << 3) >> 3 ] * v;
+            HEAPF[ (ptr1 + 0 << 3) >> 3 ] = +HEAPF[ (ptr1 + 0 << 3) >> 3 ] * v;
+            HEAPF[ (ptr1 + 1 << 3) >> 3 ] = +HEAPF[ (ptr1 + 1 << 3) >> 3 ] * v;
+            HEAPF[ (ptr1 + 2 << 3) >> 3 ] = +HEAPF[ (ptr1 + 2 << 3) >> 3 ] * v;
             return;
         }
 
@@ -735,9 +734,9 @@ var AKFHvector = (function() {
         function divVec3(ptr1, ptr2) {
             ptr1 = ptr1 | 0;
             ptr2 = ptr2 | 0;
-            HEAPF64[ (ptr1 + 0 << 3) >> 3 ] = HEAPF64[ (ptr1 + 0 << 3) >> 3 ] / HEAPF64[ (ptr2 + 0 << 3) >> 3 ];
-            HEAPF64[ (ptr1 + 1 << 3) >> 3 ] = HEAPF64[ (ptr1 + 1 << 3) >> 3 ] / HEAPF64[ (ptr2 + 1 << 3) >> 3 ];
-            HEAPF64[ (ptr1 + 2 << 3) >> 3 ] = HEAPF64[ (ptr1 + 2 << 3) >> 3 ] / HEAPF64[ (ptr2 + 2 << 3) >> 3 ];
+            HEAPF[ (ptr1 + 0 << 3) >> 3 ] = HEAPF[ (ptr1 + 0 << 3) >> 3 ] / HEAPF[ (ptr2 + 0 << 3) >> 3 ];
+            HEAPF[ (ptr1 + 1 << 3) >> 3 ] = HEAPF[ (ptr1 + 1 << 3) >> 3 ] / HEAPF[ (ptr2 + 1 << 3) >> 3 ];
+            HEAPF[ (ptr1 + 2 << 3) >> 3 ] = HEAPF[ (ptr1 + 2 << 3) >> 3 ] / HEAPF[ (ptr2 + 2 << 3) >> 3 ];
             return;
         }
 
@@ -752,9 +751,9 @@ var AKFHvector = (function() {
         function divVec3Scalar(ptr1, v) {
             ptr1 = ptr1 | 0;
             v = +v;
-            HEAPF64[ (ptr1 + 0 << 3) >> 3 ] = +HEAPF64[ (ptr1 + 0 << 3) >> 3 ] / v;
-            HEAPF64[ (ptr1 + 1 << 3) >> 3 ] = +HEAPF64[ (ptr1 + 1 << 3) >> 3 ] / v;
-            HEAPF64[ (ptr1 + 2 << 3) >> 3 ] = +HEAPF64[ (ptr1 + 2 << 3) >> 3 ] / v;
+            HEAPF[ (ptr1 + 0 << 3) >> 3 ] = +HEAPF[ (ptr1 + 0 << 3) >> 3 ] / v;
+            HEAPF[ (ptr1 + 1 << 3) >> 3 ] = +HEAPF[ (ptr1 + 1 << 3) >> 3 ] / v;
+            HEAPF[ (ptr1 + 2 << 3) >> 3 ] = +HEAPF[ (ptr1 + 2 << 3) >> 3 ] / v;
             return;
         }
 
@@ -773,21 +772,21 @@ var AKFHvector = (function() {
             var x = 0.0;
             var y = 0.0;
             var z = 0.0;
-            x = +HEAPF64[ (ptr1 + 0 << 3) >> 3 ];
-            y = +HEAPF64[ (ptr1 + 1 << 3) >> 3 ];
-            z = +HEAPF64[ (ptr1 + 2 << 3) >> 3 ];
+            x = +HEAPF[ (ptr1 + 0 << 3) >> 3 ];
+            y = +HEAPF[ (ptr1 + 1 << 3) >> 3 ];
+            z = +HEAPF[ (ptr1 + 2 << 3) >> 3 ];
             if (x > 0.0)
-                HEAPF64[ (ptr1 + 0 << 3) >> 3 ] = +(~~x);
+                HEAPF[ (ptr1 + 0 << 3) >> 3 ] = +(~~x);
             else
-                HEAPF64[ (ptr1 + 0 << 3) >> 3 ] = +(~~(x - +(~~(-1.0 - (x % 1.0))) - 1.0));
+                HEAPF[ (ptr1 + 0 << 3) >> 3 ] = +(~~(x - +(~~(-1.0 - (x % 1.0))) - 1.0));
             if (y > 0.0)
-                HEAPF64[ (ptr1 + 1 << 3) >> 3 ] = +(~~y);
+                HEAPF[ (ptr1 + 1 << 3) >> 3 ] = +(~~y);
             else
-                HEAPF64[ (ptr1 + 1 << 3) >> 3 ] = +(~~(y - +(~~(-1.0 - (y % 1.0))) - 1.0));
+                HEAPF[ (ptr1 + 1 << 3) >> 3 ] = +(~~(y - +(~~(-1.0 - (y % 1.0))) - 1.0));
             if (z > 0.0)
-                HEAPF64[ (ptr1 + 2 << 3) >> 3 ] = +(~~z);
+                HEAPF[ (ptr1 + 2 << 3) >> 3 ] = +(~~z);
             else
-                HEAPF64[ (ptr1 + 2 << 3) >> 3 ] = +(~~(z - +(~~(-1.0 - (z % 1.0))) - 1.0));
+                HEAPF[ (ptr1 + 2 << 3) >> 3 ] = +(~~(z - +(~~(-1.0 - (z % 1.0))) - 1.0));
             return;
         }
 
@@ -806,21 +805,21 @@ var AKFHvector = (function() {
             var x = 0.0;
             var y = 0.0;
             var z = 0.0;
-            x = +HEAPF64[ (ptr1 + 0 << 3) >> 3 ];
-            y = +HEAPF64[ (ptr1 + 1 << 3) >> 3 ];
-            z = +HEAPF64[ (ptr1 + 2 << 3) >> 3 ];
+            x = +HEAPF[ (ptr1 + 0 << 3) >> 3 ];
+            y = +HEAPF[ (ptr1 + 1 << 3) >> 3 ];
+            z = +HEAPF[ (ptr1 + 2 << 3) >> 3 ];
             if (x > 0.0)
-                HEAPF64[ (ptr1 + 0 << 3) >> 3 ] = +(~~x) + 1.0;
+                HEAPF[ (ptr1 + 0 << 3) >> 3 ] = +(~~x) + 1.0;
             else
-                HEAPF64[ (ptr1 + 0 << 3) >> 3 ] = +(~~(x - +(~~(-1.0 + (x % 1.0))) - 1.0));
+                HEAPF[ (ptr1 + 0 << 3) >> 3 ] = +(~~(x - +(~~(-1.0 + (x % 1.0))) - 1.0));
             if (y > 0.0)
-                HEAPF64[ (ptr1 + 1 << 3) >> 3 ] = +(~~y) + 1.0;
+                HEAPF[ (ptr1 + 1 << 3) >> 3 ] = +(~~y) + 1.0;
             else
-                HEAPF64[ (ptr1 + 1 << 3) >> 3 ] = +(~~(y - +(~~(-1.0 + (y % 1.0))) - 1.0));
+                HEAPF[ (ptr1 + 1 << 3) >> 3 ] = +(~~(y - +(~~(-1.0 + (y % 1.0))) - 1.0));
             if (z > 0.0)
-                HEAPF64[ (ptr1 + 2 << 3) >> 3 ] = +(~~z) + 1.0;
+                HEAPF[ (ptr1 + 2 << 3) >> 3 ] = +(~~z) + 1.0;
             else
-                HEAPF64[ (ptr1 + 2 << 3) >> 3 ] = +(~~(z - +(~~(-1.0 + (z % 1.0))) - 1.0));
+                HEAPF[ (ptr1 + 2 << 3) >> 3 ] = +(~~(z - +(~~(-1.0 + (z % 1.0))) - 1.0));
             return;
         }
 
@@ -835,9 +834,9 @@ var AKFHvector = (function() {
          */
         function negateVec3(ptr1) {
             ptr1 = ptr1 | 0;
-            HEAPF64[ (ptr1 + 0 << 3) >> 3 ] = -(+HEAPF64[ (ptr1 + 0 << 3) >> 3 ]);
-            HEAPF64[ (ptr1 + 1 << 3) >> 3 ] = -(+HEAPF64[ (ptr1 + 1 << 3) >> 3 ]);
-            HEAPF64[ (ptr1 + 2 << 3) >> 3 ] = -(+HEAPF64[ (ptr1 + 2 << 3) >> 3 ]);
+            HEAPF[ (ptr1 + 0 << 3) >> 3 ] = -(+HEAPF[ (ptr1 + 0 << 3) >> 3 ]);
+            HEAPF[ (ptr1 + 1 << 3) >> 3 ] = -(+HEAPF[ (ptr1 + 1 << 3) >> 3 ]);
+            HEAPF[ (ptr1 + 2 << 3) >> 3 ] = -(+HEAPF[ (ptr1 + 2 << 3) >> 3 ]);
             return;
         }
 
@@ -855,9 +854,9 @@ var AKFHvector = (function() {
             var ab0 = 0.0;
             var ab1 = 0.0;
             var ab2 = 0.0;
-            ab0 = +HEAPF64[ (ptr1 + 0 << 3) >> 3 ] * +HEAPF64[ (ptr2 + 0 << 3) >> 3 ];
-            ab1 = +HEAPF64[ (ptr1 + 1 << 3) >> 3 ] * +HEAPF64[ (ptr2 + 1 << 3) >> 3 ];
-            ab2 = +HEAPF64[ (ptr1 + 2 << 3) >> 3 ] * +HEAPF64[ (ptr2 + 2 << 3) >> 3 ];
+            ab0 = +HEAPF[ (ptr1 + 0 << 3) >> 3 ] * +HEAPF[ (ptr2 + 0 << 3) >> 3 ];
+            ab1 = +HEAPF[ (ptr1 + 1 << 3) >> 3 ] * +HEAPF[ (ptr2 + 1 << 3) >> 3 ];
+            ab2 = +HEAPF[ (ptr1 + 2 << 3) >> 3 ] * +HEAPF[ (ptr2 + 2 << 3) >> 3 ];
             return +(ab0 + ab1 + ab2);
         }
 
@@ -878,16 +877,16 @@ var AKFHvector = (function() {
             var bx = 0.0;
             var by = 0.0;
             var bz = 0.0;
-            ax = +HEAPF64[ (ptr1 + 0 << 3) >> 3 ];
-            ay = +HEAPF64[ (ptr1 + 1 << 3) >> 3 ];
-            az = +HEAPF64[ (ptr1 + 2 << 3) >> 3 ];
-            bx = +HEAPF64[ (ptr2 + 0 << 3) >> 3 ];
-            by = +HEAPF64[ (ptr2 + 1 << 3) >> 3 ];
-            bz = +HEAPF64[ (ptr2 + 2 << 3) >> 3 ];
+            ax = +HEAPF[ (ptr1 + 0 << 3) >> 3 ];
+            ay = +HEAPF[ (ptr1 + 1 << 3) >> 3 ];
+            az = +HEAPF[ (ptr1 + 2 << 3) >> 3 ];
+            bx = +HEAPF[ (ptr2 + 0 << 3) >> 3 ];
+            by = +HEAPF[ (ptr2 + 1 << 3) >> 3 ];
+            bz = +HEAPF[ (ptr2 + 2 << 3) >> 3 ];
 
-            HEAPF64[ (ptr1 + 0 << 3) >> 3 ] = +(ay * bz - az * by);
-            HEAPF64[ (ptr1 + 1 << 3) >> 3 ] = +(az * bx - ax * bz);
-            HEAPF64[ (ptr1 + 2 << 3) >> 3 ] = +(ax * by - ay * bx);
+            HEAPF[ (ptr1 + 0 << 3) >> 3 ] = +(ay * bz - az * by);
+            HEAPF[ (ptr1 + 1 << 3) >> 3 ] = +(az * bx - ax * bz);
+            HEAPF[ (ptr1 + 2 << 3) >> 3 ] = +(ax * by - ay * bx);
             return;
         }
 
@@ -907,13 +906,13 @@ var AKFHvector = (function() {
             var bSa0 = 0.0;
             var bSa1 = 0.0;
             var bSa2 = 0.0;
-            bSa0 = +HEAPF64[ (ptr2 + 0 << 3) >> 3 ] - +HEAPF64[ (ptr1 + 0 << 3) >> 3 ];
-            bSa1 = +HEAPF64[ (ptr2 + 1 << 3) >> 3 ] - +HEAPF64[ (ptr1 + 1 << 3) >> 3 ];
-            bSa2 = +HEAPF64[ (ptr2 + 2 << 3) >> 3 ] - +HEAPF64[ (ptr1 + 2 << 3) >> 3 ];
+            bSa0 = +HEAPF[ (ptr2 + 0 << 3) >> 3 ] - +HEAPF[ (ptr1 + 0 << 3) >> 3 ];
+            bSa1 = +HEAPF[ (ptr2 + 1 << 3) >> 3 ] - +HEAPF[ (ptr1 + 1 << 3) >> 3 ];
+            bSa2 = +HEAPF[ (ptr2 + 2 << 3) >> 3 ] - +HEAPF[ (ptr1 + 2 << 3) >> 3 ];
 
-            HEAPF64[ (ptr1 + 0 << 3) >> 3 ] = +HEAPF64[ (ptr1 + 0 << 3) >> 3 ] + bSa0 * v;
-            HEAPF64[ (ptr1 + 1 << 3) >> 3 ] = +HEAPF64[ (ptr1 + 1 << 3) >> 3 ] + bSa1 * v;
-            HEAPF64[ (ptr1 + 2 << 3) >> 3 ] = +HEAPF64[ (ptr1 + 2 << 3) >> 3 ] + bSa2 * v;
+            HEAPF[ (ptr1 + 0 << 3) >> 3 ] = +HEAPF[ (ptr1 + 0 << 3) >> 3 ] + bSa0 * v;
+            HEAPF[ (ptr1 + 1 << 3) >> 3 ] = +HEAPF[ (ptr1 + 1 << 3) >> 3 ] + bSa1 * v;
+            HEAPF[ (ptr1 + 2 << 3) >> 3 ] = +HEAPF[ (ptr1 + 2 << 3) >> 3 ] + bSa2 * v;
             return;
         }
 
@@ -949,9 +948,9 @@ var AKFHvector = (function() {
         function distanceVec3(ptr1, ptr2) {
             ptr1 = ptr1 | 0;
             ptr2 = ptr2 | 0;
-            HEAPF64[ (ptr1 + 0 << 3) >> 3 ] = +HEAPF64[ (ptr2 + 0 << 3) >> 3 ] - +HEAPF64[ (ptr1 + 0 << 3) >> 3 ];
-            HEAPF64[ (ptr1 + 1 << 3) >> 3 ] = +HEAPF64[ (ptr2 + 1 << 3) >> 3 ] - +HEAPF64[ (ptr1 + 1 << 3) >> 3 ];
-            HEAPF64[ (ptr1 + 2 << 3) >> 3 ] = +HEAPF64[ (ptr2 + 2 << 3) >> 3 ] - +HEAPF64[ (ptr1 + 2 << 3) >> 3 ];
+            HEAPF[ (ptr1 + 0 << 3) >> 3 ] = +HEAPF[ (ptr2 + 0 << 3) >> 3 ] - +HEAPF[ (ptr1 + 0 << 3) >> 3 ];
+            HEAPF[ (ptr1 + 1 << 3) >> 3 ] = +HEAPF[ (ptr2 + 1 << 3) >> 3 ] - +HEAPF[ (ptr1 + 1 << 3) >> 3 ];
+            HEAPF[ (ptr1 + 2 << 3) >> 3 ] = +HEAPF[ (ptr2 + 2 << 3) >> 3 ] - +HEAPF[ (ptr1 + 2 << 3) >> 3 ];
             return +lengthVec3(ptr1);
         }
 
@@ -963,9 +962,9 @@ var AKFHvector = (function() {
          */
         function lengthManVec3(ptr) {
             ptr = ptr | 0;
-            return +(+abs(+HEAPF64[ (ptr + 0 << 3) >> 3 ]) +
-                    +abs(+HEAPF64[ (ptr + 1 << 3) >> 3 ]) +
-                    +abs(+HEAPF64[ (ptr + 2 << 3) >> 3 ]));
+            return +(+abs(+HEAPF[ (ptr + 0 << 3) >> 3 ]) +
+                    +abs(+HEAPF[ (ptr + 1 << 3) >> 3 ]) +
+                    +abs(+HEAPF[ (ptr + 2 << 3) >> 3 ]));
         }
 
         /**
@@ -999,10 +998,10 @@ var AKFHvector = (function() {
             y = +y;
             z = +z;
             w = +w;
-            HEAPF64[ (ptr + 0 << 3) >> 3 ] = x; // shift must be 2 for 32bit 3 for 64bit
-            HEAPF64[ (ptr + 1 << 3) >> 3 ] = y;
-            HEAPF64[ (ptr + 2 << 3) >> 3 ] = z;
-            HEAPF64[ (ptr + 3 << 3) >> 3 ] = w;
+            HEAPF[ (ptr + 0 << 3) >> 3 ] = x; // shift must be 2 for 32bit 3 for 64bit
+            HEAPF[ (ptr + 1 << 3) >> 3 ] = y;
+            HEAPF[ (ptr + 2 << 3) >> 3 ] = z;
+            HEAPF[ (ptr + 3 << 3) >> 3 ] = w;
             return;
         }
 
@@ -1010,10 +1009,10 @@ var AKFHvector = (function() {
             ptr1 = ptr1 | 0;
             ptr2 = ptr2 | 0;
 
-            HEAPF64[ (ptr1 + 0 << 3) >> 3 ] = HEAPF64[ (ptr2 + 0 << 3) >> 3 ];
-            HEAPF64[ (ptr1 + 1 << 3) >> 3 ] = HEAPF64[ (ptr2 + 1 << 3) >> 3 ];
-            HEAPF64[ (ptr1 + 2 << 3) >> 3 ] = HEAPF64[ (ptr2 + 2 << 3) >> 3 ];
-            HEAPF64[ (ptr1 + 3 << 3) >> 3 ] = HEAPF64[ (ptr2 + 3 << 3) >> 3 ];
+            HEAPF[ (ptr1 + 0 << 3) >> 3 ] = HEAPF[ (ptr2 + 0 << 3) >> 3 ];
+            HEAPF[ (ptr1 + 1 << 3) >> 3 ] = HEAPF[ (ptr2 + 1 << 3) >> 3 ];
+            HEAPF[ (ptr1 + 2 << 3) >> 3 ] = HEAPF[ (ptr2 + 2 << 3) >> 3 ];
+            HEAPF[ (ptr1 + 3 << 3) >> 3 ] = HEAPF[ (ptr2 + 3 << 3) >> 3 ];
         }
 
         /**
@@ -1048,10 +1047,10 @@ var AKFHvector = (function() {
             var b = 0;
             var c = 0;
             var d = 0;
-            a = (+HEAPF64[ (ptr1 + 0 << 3) >> 3 ] == +HEAPF64[ (ptr2 + 0 << 3) >> 3 ]) | 0;
-            b = (+HEAPF64[ (ptr1 + 1 << 3) >> 3 ] == +HEAPF64[ (ptr2 + 1 << 3) >> 3 ]) | 0;
-            c = (+HEAPF64[ (ptr1 + 2 << 3) >> 3 ] == +HEAPF64[ (ptr2 + 2 << 3) >> 3 ]) | 0;
-            d = (+HEAPF64[ (ptr1 + 3 << 3) >> 3 ] == +HEAPF64[ (ptr2 + 3 << 3) >> 3 ]) | 0;
+            a = (+HEAPF[ (ptr1 + 0 << 3) >> 3 ] == +HEAPF[ (ptr2 + 0 << 3) >> 3 ]) | 0;
+            b = (+HEAPF[ (ptr1 + 1 << 3) >> 3 ] == +HEAPF[ (ptr2 + 1 << 3) >> 3 ]) | 0;
+            c = (+HEAPF[ (ptr1 + 2 << 3) >> 3 ] == +HEAPF[ (ptr2 + 2 << 3) >> 3 ]) | 0;
+            d = (+HEAPF[ (ptr1 + 3 << 3) >> 3 ] == +HEAPF[ (ptr2 + 3 << 3) >> 3 ]) | 0;
             return  ((a | 0) & (b | 0) & (c | 0) & (d | 0)) | 0;
         }
 
@@ -1070,10 +1069,10 @@ var AKFHvector = (function() {
             var b = 0;
             var c = 0;
             var d = 0;
-            a = (+HEAPF64[ (ptr1 + 0 << 3) >> 3 ] <= +HEAPF64[ (ptr2 + 0 << 3) >> 3 ]) | 0;
-            b = (+HEAPF64[ (ptr1 + 1 << 3) >> 3 ] <= +HEAPF64[ (ptr2 + 1 << 3) >> 3 ]) | 0;
-            c = (+HEAPF64[ (ptr1 + 2 << 3) >> 3 ] <= +HEAPF64[ (ptr2 + 2 << 3) >> 3 ]) | 0;
-            d = (+HEAPF64[ (ptr1 + 3 << 3) >> 3 ] <= +HEAPF64[ (ptr2 + 3 << 3) >> 3 ]) | 0;
+            a = (+HEAPF[ (ptr1 + 0 << 3) >> 3 ] <= +HEAPF[ (ptr2 + 0 << 3) >> 3 ]) | 0;
+            b = (+HEAPF[ (ptr1 + 1 << 3) >> 3 ] <= +HEAPF[ (ptr2 + 1 << 3) >> 3 ]) | 0;
+            c = (+HEAPF[ (ptr1 + 2 << 3) >> 3 ] <= +HEAPF[ (ptr2 + 2 << 3) >> 3 ]) | 0;
+            d = (+HEAPF[ (ptr1 + 3 << 3) >> 3 ] <= +HEAPF[ (ptr2 + 3 << 3) >> 3 ]) | 0;
             return  ((a | 0) & (b | 0) & (c | 0) & (d | 0)) | 0;
         }
 
@@ -1092,10 +1091,10 @@ var AKFHvector = (function() {
             var b = 0;
             var c = 0;
             var d = 0;
-            a = (+HEAPF64[ (ptr1 + 0 << 3) >> 3 ] >= +HEAPF64[ (ptr2 + 0 << 3) >> 3 ]) | 0;
-            b = (+HEAPF64[ (ptr1 + 1 << 3) >> 3 ] >= +HEAPF64[ (ptr2 + 1 << 3) >> 3 ]) | 0;
-            c = (+HEAPF64[ (ptr1 + 2 << 3) >> 3 ] >= +HEAPF64[ (ptr2 + 2 << 3) >> 3 ]) | 0;
-            d = (+HEAPF64[ (ptr1 + 3 << 3) >> 3 ] >= +HEAPF64[ (ptr2 + 3 << 3) >> 3 ]) | 0;
+            a = (+HEAPF[ (ptr1 + 0 << 3) >> 3 ] >= +HEAPF[ (ptr2 + 0 << 3) >> 3 ]) | 0;
+            b = (+HEAPF[ (ptr1 + 1 << 3) >> 3 ] >= +HEAPF[ (ptr2 + 1 << 3) >> 3 ]) | 0;
+            c = (+HEAPF[ (ptr1 + 2 << 3) >> 3 ] >= +HEAPF[ (ptr2 + 2 << 3) >> 3 ]) | 0;
+            d = (+HEAPF[ (ptr1 + 3 << 3) >> 3 ] >= +HEAPF[ (ptr2 + 3 << 3) >> 3 ]) | 0;
             return  ((a | 0) & (b | 0) & (c | 0) & (d | 0)) | 0;
         }
 
@@ -1110,10 +1109,10 @@ var AKFHvector = (function() {
         function addVec4(ptr1, ptr2) {
             ptr1 = ptr1 | 0;
             ptr2 = ptr2 | 0;
-            HEAPF64[ (ptr1 + 0 << 3) >> 3 ] = HEAPF64[ (ptr1 + 0 << 3) >> 3 ] + HEAPF64[ (ptr2 + 0 << 3) >> 3 ];
-            HEAPF64[ (ptr1 + 1 << 3) >> 3 ] = HEAPF64[ (ptr1 + 1 << 3) >> 3 ] + HEAPF64[ (ptr2 + 1 << 3) >> 3 ];
-            HEAPF64[ (ptr1 + 2 << 3) >> 3 ] = HEAPF64[ (ptr1 + 2 << 3) >> 3 ] + HEAPF64[ (ptr2 + 2 << 3) >> 3 ];
-            HEAPF64[ (ptr1 + 3 << 3) >> 3 ] = HEAPF64[ (ptr1 + 3 << 3) >> 3 ] + HEAPF64[ (ptr2 + 3 << 3) >> 3 ];
+            HEAPF[ (ptr1 + 0 << 3) >> 3 ] = HEAPF[ (ptr1 + 0 << 3) >> 3 ] + HEAPF[ (ptr2 + 0 << 3) >> 3 ];
+            HEAPF[ (ptr1 + 1 << 3) >> 3 ] = HEAPF[ (ptr1 + 1 << 3) >> 3 ] + HEAPF[ (ptr2 + 1 << 3) >> 3 ];
+            HEAPF[ (ptr1 + 2 << 3) >> 3 ] = HEAPF[ (ptr1 + 2 << 3) >> 3 ] + HEAPF[ (ptr2 + 2 << 3) >> 3 ];
+            HEAPF[ (ptr1 + 3 << 3) >> 3 ] = HEAPF[ (ptr1 + 3 << 3) >> 3 ] + HEAPF[ (ptr2 + 3 << 3) >> 3 ];
             return;
         }
 
@@ -1128,10 +1127,10 @@ var AKFHvector = (function() {
         function addVec4Scalar(ptr1, v) {
             ptr1 = ptr1 | 0;
             v = +v;
-            HEAPF64[ (ptr1 + 0 << 3) >> 3 ] = +HEAPF64[ (ptr1 + 0 << 3) >> 3 ] + v;
-            HEAPF64[ (ptr1 + 1 << 3) >> 3 ] = +HEAPF64[ (ptr1 + 1 << 3) >> 3 ] + v;
-            HEAPF64[ (ptr1 + 2 << 3) >> 3 ] = +HEAPF64[ (ptr1 + 2 << 3) >> 3 ] + v;
-            HEAPF64[ (ptr1 + 3 << 3) >> 3 ] = +HEAPF64[ (ptr1 + 3 << 3) >> 3 ] + v;
+            HEAPF[ (ptr1 + 0 << 3) >> 3 ] = +HEAPF[ (ptr1 + 0 << 3) >> 3 ] + v;
+            HEAPF[ (ptr1 + 1 << 3) >> 3 ] = +HEAPF[ (ptr1 + 1 << 3) >> 3 ] + v;
+            HEAPF[ (ptr1 + 2 << 3) >> 3 ] = +HEAPF[ (ptr1 + 2 << 3) >> 3 ] + v;
+            HEAPF[ (ptr1 + 3 << 3) >> 3 ] = +HEAPF[ (ptr1 + 3 << 3) >> 3 ] + v;
             return;
         }
 
@@ -1146,10 +1145,10 @@ var AKFHvector = (function() {
         function subVec4(ptr1, ptr2) {
             ptr1 = ptr1 | 0;
             ptr2 = ptr2 | 0;
-            HEAPF64[ (ptr1 + 0 << 3) >> 3 ] = HEAPF64[ (ptr1 + 0 << 3) >> 3 ] - HEAPF64[ (ptr2 + 0 << 3) >> 3 ];
-            HEAPF64[ (ptr1 + 1 << 3) >> 3 ] = HEAPF64[ (ptr1 + 1 << 3) >> 3 ] - HEAPF64[ (ptr2 + 1 << 3) >> 3 ];
-            HEAPF64[ (ptr1 + 2 << 3) >> 3 ] = HEAPF64[ (ptr1 + 2 << 3) >> 3 ] - HEAPF64[ (ptr2 + 2 << 3) >> 3 ];
-            HEAPF64[ (ptr1 + 3 << 3) >> 3 ] = HEAPF64[ (ptr1 + 3 << 3) >> 3 ] - HEAPF64[ (ptr2 + 3 << 3) >> 3 ];
+            HEAPF[ (ptr1 + 0 << 3) >> 3 ] = HEAPF[ (ptr1 + 0 << 3) >> 3 ] - HEAPF[ (ptr2 + 0 << 3) >> 3 ];
+            HEAPF[ (ptr1 + 1 << 3) >> 3 ] = HEAPF[ (ptr1 + 1 << 3) >> 3 ] - HEAPF[ (ptr2 + 1 << 3) >> 3 ];
+            HEAPF[ (ptr1 + 2 << 3) >> 3 ] = HEAPF[ (ptr1 + 2 << 3) >> 3 ] - HEAPF[ (ptr2 + 2 << 3) >> 3 ];
+            HEAPF[ (ptr1 + 3 << 3) >> 3 ] = HEAPF[ (ptr1 + 3 << 3) >> 3 ] - HEAPF[ (ptr2 + 3 << 3) >> 3 ];
             return;
         }
 
@@ -1164,10 +1163,10 @@ var AKFHvector = (function() {
         function subVec4Scalar(ptr1, v) {
             ptr1 = ptr1 | 0;
             v = +v;
-            HEAPF64[ (ptr1 + 0 << 3) >> 3 ] = +HEAPF64[ (ptr1 + 0 << 3) >> 3 ] - v;
-            HEAPF64[ (ptr1 + 1 << 3) >> 3 ] = +HEAPF64[ (ptr1 + 1 << 3) >> 3 ] - v;
-            HEAPF64[ (ptr1 + 2 << 3) >> 3 ] = +HEAPF64[ (ptr1 + 2 << 3) >> 3 ] - v;
-            HEAPF64[ (ptr1 + 3 << 3) >> 3 ] = +HEAPF64[ (ptr1 + 3 << 3) >> 3 ] - v;
+            HEAPF[ (ptr1 + 0 << 3) >> 3 ] = +HEAPF[ (ptr1 + 0 << 3) >> 3 ] - v;
+            HEAPF[ (ptr1 + 1 << 3) >> 3 ] = +HEAPF[ (ptr1 + 1 << 3) >> 3 ] - v;
+            HEAPF[ (ptr1 + 2 << 3) >> 3 ] = +HEAPF[ (ptr1 + 2 << 3) >> 3 ] - v;
+            HEAPF[ (ptr1 + 3 << 3) >> 3 ] = +HEAPF[ (ptr1 + 3 << 3) >> 3 ] - v;
             return;
         }
 
@@ -1182,10 +1181,10 @@ var AKFHvector = (function() {
         function mulVec4(ptr1, ptr2) {
             ptr1 = ptr1 | 0;
             ptr2 = ptr2 | 0;
-            HEAPF64[ (ptr1 + 0 << 3) >> 3 ] = HEAPF64[ (ptr1 + 0 << 3) >> 3 ] * HEAPF64[ (ptr2 + 0 << 3) >> 3 ];
-            HEAPF64[ (ptr1 + 1 << 3) >> 3 ] = HEAPF64[ (ptr1 + 1 << 3) >> 3 ] * HEAPF64[ (ptr2 + 1 << 3) >> 3 ];
-            HEAPF64[ (ptr1 + 2 << 3) >> 3 ] = HEAPF64[ (ptr1 + 2 << 3) >> 3 ] * HEAPF64[ (ptr2 + 2 << 3) >> 3 ];
-            HEAPF64[ (ptr1 + 3 << 3) >> 3 ] = HEAPF64[ (ptr1 + 3 << 3) >> 3 ] * HEAPF64[ (ptr2 + 3 << 3) >> 3 ];
+            HEAPF[ (ptr1 + 0 << 3) >> 3 ] = HEAPF[ (ptr1 + 0 << 3) >> 3 ] * HEAPF[ (ptr2 + 0 << 3) >> 3 ];
+            HEAPF[ (ptr1 + 1 << 3) >> 3 ] = HEAPF[ (ptr1 + 1 << 3) >> 3 ] * HEAPF[ (ptr2 + 1 << 3) >> 3 ];
+            HEAPF[ (ptr1 + 2 << 3) >> 3 ] = HEAPF[ (ptr1 + 2 << 3) >> 3 ] * HEAPF[ (ptr2 + 2 << 3) >> 3 ];
+            HEAPF[ (ptr1 + 3 << 3) >> 3 ] = HEAPF[ (ptr1 + 3 << 3) >> 3 ] * HEAPF[ (ptr2 + 3 << 3) >> 3 ];
             return;
         }
 
@@ -1200,10 +1199,10 @@ var AKFHvector = (function() {
         function mulVec4Scalar(ptr1, v) {
             ptr1 = ptr1 | 0;
             v = +v;
-            HEAPF64[ (ptr1 + 0 << 3) >> 3 ] = +HEAPF64[ (ptr1 + 0 << 3) >> 3 ] * v;
-            HEAPF64[ (ptr1 + 1 << 3) >> 3 ] = +HEAPF64[ (ptr1 + 1 << 3) >> 3 ] * v;
-            HEAPF64[ (ptr1 + 2 << 3) >> 3 ] = +HEAPF64[ (ptr1 + 2 << 3) >> 3 ] * v;
-            HEAPF64[ (ptr1 + 3 << 3) >> 3 ] = +HEAPF64[ (ptr1 + 3 << 3) >> 3 ] * v;
+            HEAPF[ (ptr1 + 0 << 3) >> 3 ] = +HEAPF[ (ptr1 + 0 << 3) >> 3 ] * v;
+            HEAPF[ (ptr1 + 1 << 3) >> 3 ] = +HEAPF[ (ptr1 + 1 << 3) >> 3 ] * v;
+            HEAPF[ (ptr1 + 2 << 3) >> 3 ] = +HEAPF[ (ptr1 + 2 << 3) >> 3 ] * v;
+            HEAPF[ (ptr1 + 3 << 3) >> 3 ] = +HEAPF[ (ptr1 + 3 << 3) >> 3 ] * v;
             return;
         }
 
@@ -1218,10 +1217,10 @@ var AKFHvector = (function() {
         function divVec4(ptr1, ptr2) {
             ptr1 = ptr1 | 0;
             ptr2 = ptr2 | 0;
-            HEAPF64[ (ptr1 + 0 << 3) >> 3 ] = HEAPF64[ (ptr1 + 0 << 3) >> 3 ] / HEAPF64[ (ptr2 + 0 << 3) >> 3 ];
-            HEAPF64[ (ptr1 + 1 << 3) >> 3 ] = HEAPF64[ (ptr1 + 1 << 3) >> 3 ] / HEAPF64[ (ptr2 + 1 << 3) >> 3 ];
-            HEAPF64[ (ptr1 + 2 << 3) >> 3 ] = HEAPF64[ (ptr1 + 2 << 3) >> 3 ] / HEAPF64[ (ptr2 + 2 << 3) >> 3 ];
-            HEAPF64[ (ptr1 + 3 << 3) >> 3 ] = HEAPF64[ (ptr1 + 3 << 3) >> 3 ] / HEAPF64[ (ptr2 + 3 << 3) >> 3 ];
+            HEAPF[ (ptr1 + 0 << 3) >> 3 ] = HEAPF[ (ptr1 + 0 << 3) >> 3 ] / HEAPF[ (ptr2 + 0 << 3) >> 3 ];
+            HEAPF[ (ptr1 + 1 << 3) >> 3 ] = HEAPF[ (ptr1 + 1 << 3) >> 3 ] / HEAPF[ (ptr2 + 1 << 3) >> 3 ];
+            HEAPF[ (ptr1 + 2 << 3) >> 3 ] = HEAPF[ (ptr1 + 2 << 3) >> 3 ] / HEAPF[ (ptr2 + 2 << 3) >> 3 ];
+            HEAPF[ (ptr1 + 3 << 3) >> 3 ] = HEAPF[ (ptr1 + 3 << 3) >> 3 ] / HEAPF[ (ptr2 + 3 << 3) >> 3 ];
             return;
         }
 
@@ -1236,10 +1235,10 @@ var AKFHvector = (function() {
         function divVec4Scalar(ptr1, v) {
             ptr1 = ptr1 | 0;
             v = +v;
-            HEAPF64[ (ptr1 + 0 << 3) >> 3 ] = +HEAPF64[ (ptr1 + 0 << 3) >> 3 ] / v;
-            HEAPF64[ (ptr1 + 1 << 3) >> 3 ] = +HEAPF64[ (ptr1 + 1 << 3) >> 3 ] / v;
-            HEAPF64[ (ptr1 + 2 << 3) >> 3 ] = +HEAPF64[ (ptr1 + 2 << 3) >> 3 ] / v;
-            HEAPF64[ (ptr1 + 3 << 3) >> 3 ] = +HEAPF64[ (ptr1 + 3 << 3) >> 3 ] / v;
+            HEAPF[ (ptr1 + 0 << 3) >> 3 ] = +HEAPF[ (ptr1 + 0 << 3) >> 3 ] / v;
+            HEAPF[ (ptr1 + 1 << 3) >> 3 ] = +HEAPF[ (ptr1 + 1 << 3) >> 3 ] / v;
+            HEAPF[ (ptr1 + 2 << 3) >> 3 ] = +HEAPF[ (ptr1 + 2 << 3) >> 3 ] / v;
+            HEAPF[ (ptr1 + 3 << 3) >> 3 ] = +HEAPF[ (ptr1 + 3 << 3) >> 3 ] / v;
             return;
         }
 
@@ -1259,26 +1258,26 @@ var AKFHvector = (function() {
             var y = 0.0;
             var z = 0.0;
             var w = 0.0;
-            x = +HEAPF64[ (ptr1 + 0 << 3) >> 3 ];
-            y = +HEAPF64[ (ptr1 + 1 << 3) >> 3 ];
-            z = +HEAPF64[ (ptr1 + 2 << 3) >> 3 ];
-            w = +HEAPF64[ (ptr1 + 3 << 3) >> 3 ];
+            x = +HEAPF[ (ptr1 + 0 << 3) >> 3 ];
+            y = +HEAPF[ (ptr1 + 1 << 3) >> 3 ];
+            z = +HEAPF[ (ptr1 + 2 << 3) >> 3 ];
+            w = +HEAPF[ (ptr1 + 3 << 3) >> 3 ];
             if (x > 0.0)
-                HEAPF64[ (ptr1 + 0 << 3) >> 3 ] = +(~~x);
+                HEAPF[ (ptr1 + 0 << 3) >> 3 ] = +(~~x);
             else
-                HEAPF64[ (ptr1 + 0 << 3) >> 3 ] = +(~~(x - +(~~(-1.0 - (x % 1.0))) - 1.0));
+                HEAPF[ (ptr1 + 0 << 3) >> 3 ] = +(~~(x - +(~~(-1.0 - (x % 1.0))) - 1.0));
             if (y > 0.0)
-                HEAPF64[ (ptr1 + 1 << 3) >> 3 ] = +(~~y);
+                HEAPF[ (ptr1 + 1 << 3) >> 3 ] = +(~~y);
             else
-                HEAPF64[ (ptr1 + 1 << 3) >> 3 ] = +(~~(y - +(~~(-1.0 - (y % 1.0))) - 1.0));
+                HEAPF[ (ptr1 + 1 << 3) >> 3 ] = +(~~(y - +(~~(-1.0 - (y % 1.0))) - 1.0));
             if (z > 0.0)
-                HEAPF64[ (ptr1 + 2 << 3) >> 3 ] = +(~~z);
+                HEAPF[ (ptr1 + 2 << 3) >> 3 ] = +(~~z);
             else
-                HEAPF64[ (ptr1 + 2 << 3) >> 3 ] = +(~~(z - +(~~(-1.0 - (z % 1.0))) - 1.0));
+                HEAPF[ (ptr1 + 2 << 3) >> 3 ] = +(~~(z - +(~~(-1.0 - (z % 1.0))) - 1.0));
             if (w > 0.0)
-                HEAPF64[ (ptr1 + 3 << 3) >> 3 ] = +(~~w);
+                HEAPF[ (ptr1 + 3 << 3) >> 3 ] = +(~~w);
             else
-                HEAPF64[ (ptr1 + 3 << 3) >> 3 ] = +(~~(w - +(~~(-1.0 - (w % 1.0))) - 1.0));
+                HEAPF[ (ptr1 + 3 << 3) >> 3 ] = +(~~(w - +(~~(-1.0 - (w % 1.0))) - 1.0));
             return;
         }
 
@@ -1298,26 +1297,26 @@ var AKFHvector = (function() {
             var y = 0.0;
             var z = 0.0;
             var w = 0.0;
-            x = +HEAPF64[ (ptr1 + 0 << 3) >> 3 ];
-            y = +HEAPF64[ (ptr1 + 1 << 3) >> 3 ];
-            z = +HEAPF64[ (ptr1 + 2 << 3) >> 3 ];
-            w = +HEAPF64[ (ptr1 + 3 << 3) >> 3 ];
+            x = +HEAPF[ (ptr1 + 0 << 3) >> 3 ];
+            y = +HEAPF[ (ptr1 + 1 << 3) >> 3 ];
+            z = +HEAPF[ (ptr1 + 2 << 3) >> 3 ];
+            w = +HEAPF[ (ptr1 + 3 << 3) >> 3 ];
             if (x > 0.0)
-                HEAPF64[ (ptr1 + 0 << 3) >> 3 ] = +(~~x) + 1.0;
+                HEAPF[ (ptr1 + 0 << 3) >> 3 ] = +(~~x) + 1.0;
             else
-                HEAPF64[ (ptr1 + 0 << 3) >> 3 ] = +(~~(x - +(~~(-1.0 + (x % 1.0))) - 1.0));
+                HEAPF[ (ptr1 + 0 << 3) >> 3 ] = +(~~(x - +(~~(-1.0 + (x % 1.0))) - 1.0));
             if (y > 0.0)
-                HEAPF64[ (ptr1 + 1 << 3) >> 3 ] = +(~~y) + 1.0;
+                HEAPF[ (ptr1 + 1 << 3) >> 3 ] = +(~~y) + 1.0;
             else
-                HEAPF64[ (ptr1 + 1 << 3) >> 3 ] = +(~~(y - +(~~(-1.0 + (y % 1.0))) - 1.0));
+                HEAPF[ (ptr1 + 1 << 3) >> 3 ] = +(~~(y - +(~~(-1.0 + (y % 1.0))) - 1.0));
             if (z > 0.0)
-                HEAPF64[ (ptr1 + 2 << 3) >> 3 ] = +(~~z) + 1.0;
+                HEAPF[ (ptr1 + 2 << 3) >> 3 ] = +(~~z) + 1.0;
             else
-                HEAPF64[ (ptr1 + 2 << 3) >> 3 ] = +(~~(z - +(~~(-1.0 + (z % 1.0))) - 1.0));
+                HEAPF[ (ptr1 + 2 << 3) >> 3 ] = +(~~(z - +(~~(-1.0 + (z % 1.0))) - 1.0));
             if (w > 0.0)
-                HEAPF64[ (ptr1 + 3 << 3) >> 3 ] = +(~~w) + 1.0;
+                HEAPF[ (ptr1 + 3 << 3) >> 3 ] = +(~~w) + 1.0;
             else
-                HEAPF64[ (ptr1 + 3 << 3) >> 3 ] = +(~~(w - +(~~(-1.0 + (w % 1.0))) - 1.0));
+                HEAPF[ (ptr1 + 3 << 3) >> 3 ] = +(~~(w - +(~~(-1.0 + (w % 1.0))) - 1.0));
             return;
         }
 
@@ -1332,10 +1331,10 @@ var AKFHvector = (function() {
          */
         function negateVec4(ptr1) {
             ptr1 = ptr1 | 0;
-            HEAPF64[ (ptr1 + 0 << 3) >> 3 ] = -(+HEAPF64[ (ptr1 + 0 << 3) >> 3 ]);
-            HEAPF64[ (ptr1 + 1 << 3) >> 3 ] = -(+HEAPF64[ (ptr1 + 1 << 3) >> 3 ]);
-            HEAPF64[ (ptr1 + 2 << 3) >> 3 ] = -(+HEAPF64[ (ptr1 + 2 << 3) >> 3 ]);
-            HEAPF64[ (ptr1 + 3 << 3) >> 3 ] = -(+HEAPF64[ (ptr1 + 3 << 3) >> 3 ]);
+            HEAPF[ (ptr1 + 0 << 3) >> 3 ] = -(+HEAPF[ (ptr1 + 0 << 3) >> 3 ]);
+            HEAPF[ (ptr1 + 1 << 3) >> 3 ] = -(+HEAPF[ (ptr1 + 1 << 3) >> 3 ]);
+            HEAPF[ (ptr1 + 2 << 3) >> 3 ] = -(+HEAPF[ (ptr1 + 2 << 3) >> 3 ]);
+            HEAPF[ (ptr1 + 3 << 3) >> 3 ] = -(+HEAPF[ (ptr1 + 3 << 3) >> 3 ]);
             return;
         }
 
@@ -1354,10 +1353,10 @@ var AKFHvector = (function() {
             var ab1 = 0.0;
             var ab2 = 0.0;
             var ab3 = 0.0;
-            ab0 = +HEAPF64[ (ptr1 + 0 << 3) >> 3 ] * +HEAPF64[ (ptr2 + 0 << 3) >> 3 ];
-            ab1 = +HEAPF64[ (ptr1 + 1 << 3) >> 3 ] * +HEAPF64[ (ptr2 + 1 << 3) >> 3 ];
-            ab2 = +HEAPF64[ (ptr1 + 2 << 3) >> 3 ] * +HEAPF64[ (ptr2 + 2 << 3) >> 3 ];
-            ab3 = +HEAPF64[ (ptr1 + 3 << 3) >> 3 ] * +HEAPF64[ (ptr2 + 3 << 3) >> 3 ];
+            ab0 = +HEAPF[ (ptr1 + 0 << 3) >> 3 ] * +HEAPF[ (ptr2 + 0 << 3) >> 3 ];
+            ab1 = +HEAPF[ (ptr1 + 1 << 3) >> 3 ] * +HEAPF[ (ptr2 + 1 << 3) >> 3 ];
+            ab2 = +HEAPF[ (ptr1 + 2 << 3) >> 3 ] * +HEAPF[ (ptr2 + 2 << 3) >> 3 ];
+            ab3 = +HEAPF[ (ptr1 + 3 << 3) >> 3 ] * +HEAPF[ (ptr2 + 3 << 3) >> 3 ];
             return +(ab0 + ab1 + ab2 + ab3);
         }
 
@@ -1378,15 +1377,15 @@ var AKFHvector = (function() {
             var bSa1 = 0.0;
             var bSa2 = 0.0;
             var bSa3 = 0.0;
-            bSa0 = +HEAPF64[ (ptr2 + 0 << 3) >> 3 ] - +HEAPF64[ (ptr1 + 0 << 3) >> 3 ];
-            bSa1 = +HEAPF64[ (ptr2 + 1 << 3) >> 3 ] - +HEAPF64[ (ptr1 + 1 << 3) >> 3 ];
-            bSa2 = +HEAPF64[ (ptr2 + 2 << 3) >> 3 ] - +HEAPF64[ (ptr1 + 2 << 3) >> 3 ];
-            bSa3 = +HEAPF64[ (ptr2 + 3 << 3) >> 3 ] - +HEAPF64[ (ptr1 + 3 << 3) >> 3 ];
+            bSa0 = +HEAPF[ (ptr2 + 0 << 3) >> 3 ] - +HEAPF[ (ptr1 + 0 << 3) >> 3 ];
+            bSa1 = +HEAPF[ (ptr2 + 1 << 3) >> 3 ] - +HEAPF[ (ptr1 + 1 << 3) >> 3 ];
+            bSa2 = +HEAPF[ (ptr2 + 2 << 3) >> 3 ] - +HEAPF[ (ptr1 + 2 << 3) >> 3 ];
+            bSa3 = +HEAPF[ (ptr2 + 3 << 3) >> 3 ] - +HEAPF[ (ptr1 + 3 << 3) >> 3 ];
 
-            HEAPF64[ (ptr1 + 0 << 3) >> 3 ] = +HEAPF64[ (ptr1 + 0 << 3) >> 3 ] + bSa0 * v;
-            HEAPF64[ (ptr1 + 1 << 3) >> 3 ] = +HEAPF64[ (ptr1 + 1 << 3) >> 3 ] + bSa1 * v;
-            HEAPF64[ (ptr1 + 2 << 3) >> 3 ] = +HEAPF64[ (ptr1 + 2 << 3) >> 3 ] + bSa2 * v;
-            HEAPF64[ (ptr1 + 3 << 3) >> 3 ] = +HEAPF64[ (ptr1 + 3 << 3) >> 3 ] + bSa3 * v;
+            HEAPF[ (ptr1 + 0 << 3) >> 3 ] = +HEAPF[ (ptr1 + 0 << 3) >> 3 ] + bSa0 * v;
+            HEAPF[ (ptr1 + 1 << 3) >> 3 ] = +HEAPF[ (ptr1 + 1 << 3) >> 3 ] + bSa1 * v;
+            HEAPF[ (ptr1 + 2 << 3) >> 3 ] = +HEAPF[ (ptr1 + 2 << 3) >> 3 ] + bSa2 * v;
+            HEAPF[ (ptr1 + 3 << 3) >> 3 ] = +HEAPF[ (ptr1 + 3 << 3) >> 3 ] + bSa3 * v;
             return;
         }
 
@@ -1422,10 +1421,10 @@ var AKFHvector = (function() {
         function distanceVec4(ptr1, ptr2) {
             ptr1 = ptr1 | 0;
             ptr2 = ptr2 | 0;
-            HEAPF64[ (ptr1 + 0 << 3) >> 3 ] = +HEAPF64[ (ptr2 + 0 << 3) >> 3 ] - +HEAPF64[ (ptr1 + 0 << 3) >> 3 ];
-            HEAPF64[ (ptr1 + 1 << 3) >> 3 ] = +HEAPF64[ (ptr2 + 1 << 3) >> 3 ] - +HEAPF64[ (ptr1 + 1 << 3) >> 3 ];
-            HEAPF64[ (ptr1 + 2 << 3) >> 3 ] = +HEAPF64[ (ptr2 + 2 << 3) >> 3 ] - +HEAPF64[ (ptr1 + 2 << 3) >> 3 ];
-            HEAPF64[ (ptr1 + 3 << 3) >> 3 ] = +HEAPF64[ (ptr2 + 3 << 3) >> 3 ] - +HEAPF64[ (ptr1 + 3 << 3) >> 3 ];
+            HEAPF[ (ptr1 + 0 << 3) >> 3 ] = +HEAPF[ (ptr2 + 0 << 3) >> 3 ] - +HEAPF[ (ptr1 + 0 << 3) >> 3 ];
+            HEAPF[ (ptr1 + 1 << 3) >> 3 ] = +HEAPF[ (ptr2 + 1 << 3) >> 3 ] - +HEAPF[ (ptr1 + 1 << 3) >> 3 ];
+            HEAPF[ (ptr1 + 2 << 3) >> 3 ] = +HEAPF[ (ptr2 + 2 << 3) >> 3 ] - +HEAPF[ (ptr1 + 2 << 3) >> 3 ];
+            HEAPF[ (ptr1 + 3 << 3) >> 3 ] = +HEAPF[ (ptr2 + 3 << 3) >> 3 ] - +HEAPF[ (ptr1 + 3 << 3) >> 3 ];
             return +lengthVec4(ptr1);
         }
 
@@ -1437,10 +1436,10 @@ var AKFHvector = (function() {
          */
         function lengthManVec4(ptr) {
             ptr = ptr | 0;
-            return +(+abs(+HEAPF64[ (ptr + 0 << 3) >> 3 ]) +
-                    +abs(+HEAPF64[ (ptr + 1 << 3) >> 3 ]) +
-                    +abs(+HEAPF64[ (ptr + 2 << 3) >> 3 ]) +
-                    +abs(+HEAPF64[ (ptr + 3 << 3) >> 3 ]));
+            return +(+abs(+HEAPF[ (ptr + 0 << 3) >> 3 ]) +
+                    +abs(+HEAPF[ (ptr + 1 << 3) >> 3 ]) +
+                    +abs(+HEAPF[ (ptr + 2 << 3) >> 3 ]) +
+                    +abs(+HEAPF[ (ptr + 3 << 3) >> 3 ]));
         }
 
         /**
@@ -1546,7 +1545,7 @@ var AKFHvector = (function() {
      *
      * @param {int} ptr
      * @param {int} len
-     * @returns {Float32Array}
+     * @returns {Float64Array}
      */
     akfh.getVector = function(ptr, len) {
         return array.subarray(ptr, ptr + len);
@@ -1578,4 +1577,4 @@ var AKFHvector = (function() {
     };
 
     return akfh;
-})();
+})( );

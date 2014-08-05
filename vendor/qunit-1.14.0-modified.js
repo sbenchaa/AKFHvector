@@ -91,7 +91,7 @@ var QUnit,
 // Root QUnit object.
 // `QUnit` initialized at top of scope
 QUnit = {
-
+	sum : 0,
 	// call on start of module test to prepend name to all tests
 	module: function( name, testEnvironment ) {
 		config.currentModule = name;
@@ -825,7 +825,8 @@ function done() {
 	var i, key,
 		banner = id( "qunit-banner" ),
 		tests = id( "qunit-tests" ),
-		runtime = /*+new Date()*/performance.now() - config.started,
+		//runtime = /*+new Date()*/performance.now() - config.started,
+		runtime = QUnit.sum,
 		passed = config.stats.all - config.stats.bad,
 		html = [
 			"Tests completed in ",
@@ -1410,7 +1411,8 @@ Test.prototype = {
 			time = document.createElement( "span" );
 			time.className = "runtime";
 			time.innerHTML = this.callbackRuntime.toFixed(4) + " ms";
-
+			QUnit.sum += this.callbackRuntime;
+			
 			// `li` initialized at top of scope
 			li = id( this.id );
 			li.className = bad ? "fail" : "pass";
