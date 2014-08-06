@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>AKFHvector* 32bit (asmjs)</title>
+        <title>AKFHvector* 32bit float (asmjs)</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="../vendor/qunit-theme-burce.css">
@@ -32,30 +32,42 @@
              * along with this program.  If not, see <http://www.gnu.org/licenses/>.
              */
 
+			/*
+			//--------------------------------------------------------bias
+            function bias(assert, instance) {
+                instance.callbackStarted = performance.now();
+                instance.callbackEnded = performance.now();
+                assert.strictEqual(true, true, "Passed!");
+            }
+            QUnit.test("bias", function(assert, instance) {
+                bias(assert, instance);
+                bias(assert, instance);
+            });
+            */
             //--------------------------------------------------------allocate
             function allocate(assert, instance, _in, _out) {
                 instance.callbackStarted = performance.now();
-                var v0 = AKFHvector.allocate(_in[0]);
+                var v0 = AKFHvector32.allocate(_in[0]);
                 instance.callbackEnded = performance.now();
                 assert.close(v0, _out[0], 0.001);
             }
             QUnit.test("allocate", function(assert, instance) {
                 allocate(assert, instance, [3], [0]);
                 allocate(assert, instance, [3], [3]);
-                AKFHvector.clearHEAP();
+                AKFHvector32.clearHEAP();
             });
 
             /////////////////////////////////////////////////////////////////////////////
             QUnit.module("Vec2");
             //--------------------------------------------------------putVec2
             function putVec2(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(2);
+                var v0 = AKFHvector32.allocate(2);
                 instance.callbackStarted = performance.now();
-                AKFHvector.putVec2(v0, _in[0], _in[1]);
+                AKFHvector32.putVec2(v0, _in[0], _in[1]);
                 instance.callbackEnded = performance.now();
-                assert.close(AKFHvector.fetch(v0, 0), _out[0], 0.001);
-                assert.close(AKFHvector.fetch(v0, 1), _out[1], 0.001);
-                AKFHvector.clearHEAP();
+                assert.close(AKFHvector32.fetch(v0, 0), _out[0], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 1), _out[1], 0.001);
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("putVec2", function(assert, instance) {
                 putVec2(assert, instance, [3.3, 13.4], [3.3, 13.4]);
@@ -63,15 +75,15 @@
             });
             //--------------------------------------------------------copyVec2
             function copyVec2(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(2);
-                var v1 = AKFHvector.allocate(2);
-                AKFHvector.putVec2(v0, _in[0], _in[1]);
+                var v0 = AKFHvector32.allocate(2);
+                var v1 = AKFHvector32.allocate(2);
+                AKFHvector32.putVec2(v0, _in[0], _in[1]);
                 instance.callbackStarted = performance.now();
-                AKFHvector.copyVec2(v1, v0);
+                AKFHvector32.copyVec2(v1, v0);
                 instance.callbackEnded = performance.now();
-                assert.close(AKFHvector.fetch(v1, 0), _out[0], 0.001);
-                assert.close(AKFHvector.fetch(v1, 1), _out[1], 0.001);
-                AKFHvector.clearHEAP();
+                assert.close(AKFHvector32.fetch(v1, 0), _out[0], 0.001);
+                assert.close(AKFHvector32.fetch(v1, 1), _out[1], 0.001);
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("copyVec2", function(assert, instance) {
                 copyVec2(assert, instance, [3.3, 13.4], [3.3, 13.4]);
@@ -79,14 +91,14 @@
             });
             //--------------------------------------------------------getVector2
             function getVector2(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(2);
-                AKFHvector.putVec2(v0, _in[0], _in[1]);
+                var v0 = AKFHvector32.allocate(2);
+                AKFHvector32.putVec2(v0, _in[0], _in[1]);
                 instance.callbackStarted = performance.now();
-                var res = AKFHvector.getVector(v0, 2);
+                var res = AKFHvector32.getVector(v0, 2);
                 instance.callbackEnded = performance.now();
                 assert.close(res[0], _out[0], 0.001);
                 assert.close(res[1], _out[1], 0.001);
-                AKFHvector.clearHEAP();
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("getVector2", function(assert, instance) {
                 getVector2(assert, instance, [3.3, 13.4], [3.3, 13.4]);
@@ -94,15 +106,15 @@
             });
             //--------------------------------------------------------equalVec2
             function equalVec2(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(2);
-                var v1 = AKFHvector.allocate(2);
-                AKFHvector.putVec2(v0, _in[0], _in[1]);
-                AKFHvector.putVec2(v1, _in[2], _in[3]);
+                var v0 = AKFHvector32.allocate(2);
+                var v1 = AKFHvector32.allocate(2);
+                AKFHvector32.putVec2(v0, _in[0], _in[1]);
+                AKFHvector32.putVec2(v1, _in[2], _in[3]);
                 instance.callbackStarted = performance.now();
-                var res = AKFHvector.equalVec2(v0, v1);
+                var res = AKFHvector32.equalVec2(v0, v1);
                 instance.callbackEnded = performance.now();
                 assert.close(res, _out[0], 0.001);
-                AKFHvector.clearHEAP();
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("equalVec2", function(assert, instance) {
                 equalVec2(assert, instance, [3.3, 13.4, 3.3, 13.4], [1.0]);
@@ -110,15 +122,15 @@
             });
             //--------------------------------------------------------lequalVec2
             function lequalVec2(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(2);
-                var v1 = AKFHvector.allocate(2);
-                AKFHvector.putVec2(v0, _in[0], _in[1]);
-                AKFHvector.putVec2(v1, _in[2], _in[3]);
+                var v0 = AKFHvector32.allocate(2);
+                var v1 = AKFHvector32.allocate(2);
+                AKFHvector32.putVec2(v0, _in[0], _in[1]);
+                AKFHvector32.putVec2(v1, _in[2], _in[3]);
                 instance.callbackStarted = performance.now();
-                var res = AKFHvector.lequalVec2(v0, v1);
+                var res = AKFHvector32.lequalVec2(v0, v1);
                 instance.callbackEnded = performance.now();
                 assert.close(res, _out[0], 0.001);
-                AKFHvector.clearHEAP();
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("lequalVec2", function(assert, instance) {
                 lequalVec2(assert, instance, [0.3, 11.4, 3.3, 13.4], [1.0]);
@@ -126,15 +138,15 @@
             });
             //--------------------------------------------------------gequalVec2
             function gequalVec2(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(2);
-                var v1 = AKFHvector.allocate(2);
-                AKFHvector.putVec2(v0, _in[0], _in[1]);
-                AKFHvector.putVec2(v1, _in[2], _in[3]);
+                var v0 = AKFHvector32.allocate(2);
+                var v1 = AKFHvector32.allocate(2);
+                AKFHvector32.putVec2(v0, _in[0], _in[1]);
+                AKFHvector32.putVec2(v1, _in[2], _in[3]);
                 instance.callbackStarted = performance.now();
-                var res = AKFHvector.gequalVec2(v0, v1);
+                var res = AKFHvector32.gequalVec2(v0, v1);
                 instance.callbackEnded = performance.now();
                 assert.close(res, _out[0], 0.001);
-                AKFHvector.clearHEAP();
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("gequalVec2", function(assert, instance) {
                 gequalVec2(assert, instance, [0.3, 11.4, 3.3, 13.4], [0.0]);
@@ -142,16 +154,16 @@
             });
             //--------------------------------------------------------addVec2
             function addVec2(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(2);
-                var v1 = AKFHvector.allocate(2);
-                AKFHvector.putVec2(v0, _in[0], _in[1]);
-                AKFHvector.putVec2(v1, _in[2], _in[3]);
+                var v0 = AKFHvector32.allocate(2);
+                var v1 = AKFHvector32.allocate(2);
+                AKFHvector32.putVec2(v0, _in[0], _in[1]);
+                AKFHvector32.putVec2(v1, _in[2], _in[3]);
                 instance.callbackStarted = performance.now();
-                AKFHvector.addVec2(v0, v1);
+                AKFHvector32.addVec2(v0, v1);
                 instance.callbackEnded = performance.now();
-                assert.close(AKFHvector.fetch(v0, 0), _out[0], 0.001);
-                assert.close(AKFHvector.fetch(v0, 1), _out[1], 0.001);
-                AKFHvector.clearHEAP();
+                assert.close(AKFHvector32.fetch(v0, 0), _out[0], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 1), _out[1], 0.001);
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("addVec2", function(assert, instance) {
                 addVec2(assert, instance, [0.33, 11.4, 3.3, 13.4], [3.63, 24.8]);
@@ -159,14 +171,14 @@
             });
             //--------------------------------------------------------addVec2Scalar
             function addVec2Scalar(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(2);
-                AKFHvector.putVec2(v0, _in[0], _in[1]);
+                var v0 = AKFHvector32.allocate(2);
+                AKFHvector32.putVec2(v0, _in[0], _in[1]);
                 instance.callbackStarted = performance.now();
-                AKFHvector.addVec2Scalar(v0, _in[2]);
+                AKFHvector32.addVec2Scalar(v0, _in[2]);
                 instance.callbackEnded = performance.now();
-                assert.close(AKFHvector.fetch(v0, 0), _out[0], 0.001);
-                assert.close(AKFHvector.fetch(v0, 1), _out[1], 0.001);
-                AKFHvector.clearHEAP();
+                assert.close(AKFHvector32.fetch(v0, 0), _out[0], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 1), _out[1], 0.001);
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("addVec2Scalar", function(assert, instance) {
                 addVec2Scalar(assert, instance, [0.33, 11.4, 2], [2.33, 13.4]);
@@ -174,16 +186,16 @@
             });
             //--------------------------------------------------------subVec2
             function subVec2(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(2);
-                var v1 = AKFHvector.allocate(2);
-                AKFHvector.putVec2(v0, _in[0], _in[1]);
-                AKFHvector.putVec2(v1, _in[2], _in[3]);
+                var v0 = AKFHvector32.allocate(2);
+                var v1 = AKFHvector32.allocate(2);
+                AKFHvector32.putVec2(v0, _in[0], _in[1]);
+                AKFHvector32.putVec2(v1, _in[2], _in[3]);
                 instance.callbackStarted = performance.now();
-                AKFHvector.subVec2(v0, v1);
+                AKFHvector32.subVec2(v0, v1);
                 instance.callbackEnded = performance.now();
-                assert.close(AKFHvector.fetch(v0, 0), _out[0], 0.001);
-                assert.close(AKFHvector.fetch(v0, 1), _out[1], 0.001);
-                AKFHvector.clearHEAP();
+                assert.close(AKFHvector32.fetch(v0, 0), _out[0], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 1), _out[1], 0.001);
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("subVec2", function(assert, instance) {
                 subVec2(assert, instance, [0.33, 11.4, 3.33, 13.4], [-3, -2]);
@@ -191,14 +203,14 @@
             });
             //--------------------------------------------------------subVec2Scalar
             function subVec2Scalar(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(2);
-                AKFHvector.putVec2(v0, _in[0], _in[1]);
+                var v0 = AKFHvector32.allocate(2);
+                AKFHvector32.putVec2(v0, _in[0], _in[1]);
                 instance.callbackStarted = performance.now();
-                AKFHvector.subVec2Scalar(v0, _in[2]);
+                AKFHvector32.subVec2Scalar(v0, _in[2]);
                 instance.callbackEnded = performance.now();
-                assert.close(AKFHvector.fetch(v0, 0), _out[0], 0.001);
-                assert.close(AKFHvector.fetch(v0, 1), _out[1], 0.001);
-                AKFHvector.clearHEAP();
+                assert.close(AKFHvector32.fetch(v0, 0), _out[0], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 1), _out[1], 0.001);
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("subVec2Scalar", function(assert, instance) {
                 subVec2Scalar(assert, instance, [0.33, 11.4, 2], [-1.67, 9.4]);
@@ -206,16 +218,16 @@
             });
             //--------------------------------------------------------mulVec2
             function mulVec2(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(2);
-                var v1 = AKFHvector.allocate(2);
-                AKFHvector.putVec2(v0, _in[0], _in[1]);
-                AKFHvector.putVec2(v1, _in[2], _in[3]);
+                var v0 = AKFHvector32.allocate(2);
+                var v1 = AKFHvector32.allocate(2);
+                AKFHvector32.putVec2(v0, _in[0], _in[1]);
+                AKFHvector32.putVec2(v1, _in[2], _in[3]);
                 instance.callbackStarted = performance.now();
-                AKFHvector.mulVec2(v0, v1);
+                AKFHvector32.mulVec2(v0, v1);
                 instance.callbackEnded = performance.now();
-                assert.close(AKFHvector.fetch(v0, 0), _out[0], 0.001);
-                assert.close(AKFHvector.fetch(v0, 1), _out[1], 0.001);
-                AKFHvector.clearHEAP();
+                assert.close(AKFHvector32.fetch(v0, 0), _out[0], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 1), _out[1], 0.001);
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("mulVec2", function(assert, instance) {
                 mulVec2(assert, instance, [1, 2, 4, 5], [4, 10]);
@@ -223,14 +235,14 @@
             });
             //--------------------------------------------------------mulVec2Scalar
             function mulVec2Scalar(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(2);
-                AKFHvector.putVec2(v0, _in[0], _in[1]);
+                var v0 = AKFHvector32.allocate(2);
+                AKFHvector32.putVec2(v0, _in[0], _in[1]);
                 instance.callbackStarted = performance.now();
-                AKFHvector.mulVec2Scalar(v0, _in[2]);
+                AKFHvector32.mulVec2Scalar(v0, _in[2]);
                 instance.callbackEnded = performance.now();
-                assert.close(AKFHvector.fetch(v0, 0), _out[0], 0.001);
-                assert.close(AKFHvector.fetch(v0, 1), _out[1], 0.001);
-                AKFHvector.clearHEAP();
+                assert.close(AKFHvector32.fetch(v0, 0), _out[0], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 1), _out[1], 0.001);
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("mulVec2Scalar", function(assert, instance) {
                 mulVec2Scalar(assert, instance, [0.33, 11.4, 2], [0.66, 22.8]);
@@ -238,16 +250,16 @@
             });
             //--------------------------------------------------------divVec2
             function divVec2(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(2);
-                var v1 = AKFHvector.allocate(2);
-                AKFHvector.putVec2(v0, _in[0], _in[1]);
-                AKFHvector.putVec2(v1, _in[2], _in[3]);
+                var v0 = AKFHvector32.allocate(2);
+                var v1 = AKFHvector32.allocate(2);
+                AKFHvector32.putVec2(v0, _in[0], _in[1]);
+                AKFHvector32.putVec2(v1, _in[2], _in[3]);
                 instance.callbackStarted = performance.now();
-                AKFHvector.divVec2(v0, v1);
+                AKFHvector32.divVec2(v0, v1);
                 instance.callbackEnded = performance.now();
-                assert.close(AKFHvector.fetch(v0, 0), _out[0], 0.001);
-                assert.close(AKFHvector.fetch(v0, 1), _out[1], 0.001);
-                AKFHvector.clearHEAP();
+                assert.close(AKFHvector32.fetch(v0, 0), _out[0], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 1), _out[1], 0.001);
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("divVec2", function(assert, instance) {
                 divVec2(assert, instance, [1, 2, 4, 5], [0.25, 0.4]);
@@ -255,14 +267,14 @@
             });
             //--------------------------------------------------------divVec2Scalar
             function divVec2Scalar(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(2);
-                AKFHvector.putVec2(v0, _in[0], _in[1]);
+                var v0 = AKFHvector32.allocate(2);
+                AKFHvector32.putVec2(v0, _in[0], _in[1]);
                 instance.callbackStarted = performance.now();
-                AKFHvector.divVec2Scalar(v0, _in[2]);
+                AKFHvector32.divVec2Scalar(v0, _in[2]);
                 instance.callbackEnded = performance.now();
-                assert.close(AKFHvector.fetch(v0, 0), _out[0], 0.001);
-                assert.close(AKFHvector.fetch(v0, 1), _out[1], 0.001);
-                AKFHvector.clearHEAP();
+                assert.close(AKFHvector32.fetch(v0, 0), _out[0], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 1), _out[1], 0.001);
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("divVec2Scalar", function(assert, instance) {
                 divVec2Scalar(assert, instance, [0.33, 11.4, 2], [0.165, 5.7]);
@@ -270,14 +282,14 @@
             });
             //--------------------------------------------------------floorVec2
             function floorVec2(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(2);
-                AKFHvector.putVec2(v0, _in[0], _in[1]);
+                var v0 = AKFHvector32.allocate(2);
+                AKFHvector32.putVec2(v0, _in[0], _in[1]);
                 instance.callbackStarted = performance.now();
-                AKFHvector.floorVec2(v0);
+                AKFHvector32.floorVec2(v0);
                 instance.callbackEnded = performance.now();
-                assert.close(AKFHvector.fetch(v0, 0), _out[0], 0.001);
-                assert.close(AKFHvector.fetch(v0, 1), _out[1], 0.001);
-                AKFHvector.clearHEAP();
+                assert.close(AKFHvector32.fetch(v0, 0), _out[0], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 1), _out[1], 0.001);
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("floorVec2", function(assert, instance) {
                 floorVec2(assert, instance, [0.33, 11.4], [0, 11]);
@@ -285,14 +297,14 @@
             });
             //--------------------------------------------------------ceilVec2
             function ceilVec2(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(2);
-                AKFHvector.putVec2(v0, _in[0], _in[1]);
+                var v0 = AKFHvector32.allocate(2);
+                AKFHvector32.putVec2(v0, _in[0], _in[1]);
                 instance.callbackStarted = performance.now();
-                AKFHvector.ceilVec2(v0);
+                AKFHvector32.ceilVec2(v0);
                 instance.callbackEnded = performance.now();
-                assert.close(AKFHvector.fetch(v0, 0), _out[0], 0.001);
-                assert.close(AKFHvector.fetch(v0, 1), _out[1], 0.001);
-                AKFHvector.clearHEAP();
+                assert.close(AKFHvector32.fetch(v0, 0), _out[0], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 1), _out[1], 0.001);
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("ceilVec2", function(assert, instance) {
                 ceilVec2(assert, instance, [0.33, 11.4], [1, 12]);
@@ -300,14 +312,14 @@
             });
             //--------------------------------------------------------negateVec2
             function negateVec2(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(2);
-                AKFHvector.putVec2(v0, _in[0], _in[1]);
+                var v0 = AKFHvector32.allocate(2);
+                AKFHvector32.putVec2(v0, _in[0], _in[1]);
                 instance.callbackStarted = performance.now();
-                AKFHvector.negateVec2(v0);
+                AKFHvector32.negateVec2(v0);
                 instance.callbackEnded = performance.now();
-                assert.close(AKFHvector.fetch(v0, 0), _out[0], 0.001);
-                assert.close(AKFHvector.fetch(v0, 1), _out[1], 0.001);
-                AKFHvector.clearHEAP();
+                assert.close(AKFHvector32.fetch(v0, 0), _out[0], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 1), _out[1], 0.001);
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("negateVec2", function(assert, instance) {
                 negateVec2(assert, instance, [0.33, 11.4], [-0.33, -11.4]);
@@ -315,15 +327,15 @@
             });
             //--------------------------------------------------------dotVec2
             function dotVec2(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(2);
-                var v1 = AKFHvector.allocate(2);
-                AKFHvector.putVec2(v0, _in[0], _in[1]);
-                AKFHvector.putVec2(v1, _in[2], _in[3]);
+                var v0 = AKFHvector32.allocate(2);
+                var v1 = AKFHvector32.allocate(2);
+                AKFHvector32.putVec2(v0, _in[0], _in[1]);
+                AKFHvector32.putVec2(v1, _in[2], _in[3]);
                 instance.callbackStarted = performance.now();
-                var res = AKFHvector.dotVec2(v0, v1);
+                var res = AKFHvector32.dotVec2(v0, v1);
                 instance.callbackEnded = performance.now();
                 assert.close(res, _out[0], 0.001);
-                AKFHvector.clearHEAP();
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("dotVec2", function(assert, instance) {
                 dotVec2(assert, instance, [1, 2, 4, 5], [14]);
@@ -331,15 +343,15 @@
             });
             //--------------------------------------------------------crossVec2
             function crossVec2(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(2);
-                var v1 = AKFHvector.allocate(2);
-                AKFHvector.putVec2(v0, _in[0], _in[1]);
-                AKFHvector.putVec2(v1, _in[2], _in[3]);
+                var v0 = AKFHvector32.allocate(2);
+                var v1 = AKFHvector32.allocate(2);
+                AKFHvector32.putVec2(v0, _in[0], _in[1]);
+                AKFHvector32.putVec2(v1, _in[2], _in[3]);
                 instance.callbackStarted = performance.now();
-                var res = AKFHvector.crossVec2(v0, v1);
+                var res = AKFHvector32.crossVec2(v0, v1);
                 instance.callbackEnded = performance.now();
                 assert.close(res, _out[0], 0.001);
-                AKFHvector.clearHEAP();
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("crossVec2", function(assert, instance) {
                 crossVec2(assert, instance, [5, 0, 0, 5], [25]);
@@ -347,16 +359,16 @@
             });
             //--------------------------------------------------------lerpVec2
             function lerpVec2(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(2);
-                var v1 = AKFHvector.allocate(2);
-                AKFHvector.putVec2(v0, _in[0], _in[1]);
-                AKFHvector.putVec2(v1, _in[2], _in[3]);
+                var v0 = AKFHvector32.allocate(2);
+                var v1 = AKFHvector32.allocate(2);
+                AKFHvector32.putVec2(v0, _in[0], _in[1]);
+                AKFHvector32.putVec2(v1, _in[2], _in[3]);
                 instance.callbackStarted = performance.now();
-                AKFHvector.lerpVec2(v0, v1, _in[4]);
+                AKFHvector32.lerpVec2(v0, v1, _in[4]);
                 instance.callbackEnded = performance.now();
-                assert.close(AKFHvector.fetch(v0, 0), _out[0], 0.001);
-                assert.close(AKFHvector.fetch(v0, 1), _out[1], 0.001);
-                AKFHvector.clearHEAP();
+                assert.close(AKFHvector32.fetch(v0, 0), _out[0], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 1), _out[1], 0.001);
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("lerpVec2", function(assert, instance) {
                 lerpVec2(assert, instance, [1, 2, 10, 20, 0.5], [5.5, 11]);
@@ -364,13 +376,13 @@
             });
             //--------------------------------------------------------lengthSqVec2
             function lengthSqVec2(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(2);
-                AKFHvector.putVec2(v0, _in[0], _in[1]);
+                var v0 = AKFHvector32.allocate(2);
+                AKFHvector32.putVec2(v0, _in[0], _in[1]);
                 instance.callbackStarted = performance.now();
-                var res = AKFHvector.lengthSqVec2(v0);
+                var res = AKFHvector32.lengthSqVec2(v0);
                 instance.callbackEnded = performance.now();
                 assert.close(res, _out[0], 0.001);
-                AKFHvector.clearHEAP();
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("lengthSqVec2", function(assert, instance) {
                 lengthSqVec2(assert, instance, [1, 2], [5]);
@@ -378,13 +390,13 @@
             });
             //--------------------------------------------------------lengthVec2
             function lengthVec2(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(2);
-                AKFHvector.putVec2(v0, _in[0], _in[1]);
+                var v0 = AKFHvector32.allocate(2);
+                AKFHvector32.putVec2(v0, _in[0], _in[1]);
                 instance.callbackStarted = performance.now();
-                var res = AKFHvector.lengthVec2(v0);
+                var res = AKFHvector32.lengthVec2(v0);
                 instance.callbackEnded = performance.now();
                 assert.close(res, _out[0], 0.001);
-                AKFHvector.clearHEAP();
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("lengthVec2", function(assert, instance) {
                 lengthVec2(assert, instance, [1, 2], [Math.sqrt(5)]);
@@ -392,15 +404,15 @@
             });
             //--------------------------------------------------------distanceVec2
             function distanceVec2(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(2);
-                var v1 = AKFHvector.allocate(2);
-                AKFHvector.putVec2(v0, _in[0], _in[1]);
-                AKFHvector.putVec2(v1, _in[2], _in[3]);
+                var v0 = AKFHvector32.allocate(2);
+                var v1 = AKFHvector32.allocate(2);
+                AKFHvector32.putVec2(v0, _in[0], _in[1]);
+                AKFHvector32.putVec2(v1, _in[2], _in[3]);
                 instance.callbackStarted = performance.now();
-                var res = AKFHvector.distanceVec2(v0, v1);
+                var res = AKFHvector32.distanceVec2(v0, v1);
                 instance.callbackEnded = performance.now();
                 assert.close(res, _out[0], 0.001);
-                AKFHvector.clearHEAP();
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("distanceVec2", function(assert, instance) {
                 distanceVec2(assert, instance, [1, 2, 1, 2], [0]);
@@ -408,13 +420,13 @@
             });
             //--------------------------------------------------------lengthManVec2
             function lengthManVec2(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(2);
-                AKFHvector.putVec2(v0, _in[0], _in[1]);
+                var v0 = AKFHvector32.allocate(2);
+                AKFHvector32.putVec2(v0, _in[0], _in[1]);
                 instance.callbackStarted = performance.now();
-                var res = AKFHvector.lengthManVec2(v0);
+                var res = AKFHvector32.lengthManVec2(v0);
                 instance.callbackEnded = performance.now();
                 assert.close(res, _out[0], 0.001);
-                AKFHvector.clearHEAP();
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("lengthManVec2", function(assert, instance) {
                 lengthManVec2(assert, instance, [1, 2], [3]);
@@ -422,14 +434,14 @@
             });
             //--------------------------------------------------------normalizeVec2
             function normalizeVec2(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(2);
-                AKFHvector.putVec2(v0, _in[0], _in[1]);
+                var v0 = AKFHvector32.allocate(2);
+                AKFHvector32.putVec2(v0, _in[0], _in[1]);
                 instance.callbackStarted = performance.now();
-                AKFHvector.normalizeVec2(v0);
+                AKFHvector32.normalizeVec2(v0);
                 instance.callbackEnded = performance.now();
-                assert.close(AKFHvector.fetch(v0, 0), _out[0], 0.001);
-                assert.close(AKFHvector.fetch(v0, 1), _out[1], 0.001);
-                AKFHvector.clearHEAP();
+                assert.close(AKFHvector32.fetch(v0, 0), _out[0], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 1), _out[1], 0.001);
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("normalizeVec2", function(assert, instance) {
                 normalizeVec2(assert, instance, [1, 2], [0.4472135954999579, 0.8944271909999159]);
@@ -439,14 +451,14 @@
             QUnit.module("Vec3");
             //--------------------------------------------------------putVector3
             function putVector3(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(3);
+                var v0 = AKFHvector32.allocate(3);
                 instance.callbackStarted = performance.now();
-                AKFHvector.putVec3(v0, _in[0], _in[1], _in[2]);
+                AKFHvector32.putVec3(v0, _in[0], _in[1], _in[2]);
                 instance.callbackEnded = performance.now();
-                assert.close(AKFHvector.fetch(v0, 0), _out[0], 0.001);
-                assert.close(AKFHvector.fetch(v0, 1), _out[1], 0.001);
-                assert.close(AKFHvector.fetch(v0, 2), _out[2], 0.001);
-                AKFHvector.clearHEAP();
+                assert.close(AKFHvector32.fetch(v0, 0), _out[0], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 1), _out[1], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 2), _out[2], 0.001);
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("putVector3", function(assert, instance) {
                 putVector3(assert, instance, [3.3, 13.4, 1.5], [3.3, 13.4, 1.5]);
@@ -454,16 +466,16 @@
             });
             //--------------------------------------------------------copyVec3
             function copyVec3(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(3);
-                var v1 = AKFHvector.allocate(3);
-                AKFHvector.putVec3(v0, _in[0], _in[1], _in[2]);
+                var v0 = AKFHvector32.allocate(3);
+                var v1 = AKFHvector32.allocate(3);
+                AKFHvector32.putVec3(v0, _in[0], _in[1], _in[2]);
                 instance.callbackStarted = performance.now();
-                AKFHvector.copyVec3(v1, v0);
+                AKFHvector32.copyVec3(v1, v0);
                 instance.callbackEnded = performance.now();
-                assert.close(AKFHvector.fetch(v1, 0), _out[0], 0.001);
-                assert.close(AKFHvector.fetch(v1, 1), _out[1], 0.001);
-                assert.close(AKFHvector.fetch(v1, 2), _out[2], 0.001);
-                AKFHvector.clearHEAP();
+                assert.close(AKFHvector32.fetch(v1, 0), _out[0], 0.001);
+                assert.close(AKFHvector32.fetch(v1, 1), _out[1], 0.001);
+                assert.close(AKFHvector32.fetch(v1, 2), _out[2], 0.001);
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("copyVec3", function(assert, instance) {
                 copyVec3(assert, instance, [3.3, 13.4, 1.5], [3.3, 13.4, 1.5]);
@@ -471,15 +483,15 @@
             });
             //--------------------------------------------------------getVector3
             function getVector3(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(3);
-                AKFHvector.putVec3(v0, _in[0], _in[1], _in[2]);
+                var v0 = AKFHvector32.allocate(3);
+                AKFHvector32.putVec3(v0, _in[0], _in[1], _in[2]);
                 instance.callbackStarted = performance.now();
-                var res = AKFHvector.getVector(v0, 3);
+                var res = AKFHvector32.getVector(v0, 3);
                 instance.callbackEnded = performance.now();
                 assert.close(res[0], _out[0], 0.001);
                 assert.close(res[1], _out[1], 0.001);
                 assert.close(res[2], _out[2], 0.001);
-                AKFHvector.clearHEAP();
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("getVector3", function(assert, instance) {
                 getVector3(assert, instance, [3.3, 13.4, 1.5], [3.3, 13.4, 1.5]);
@@ -487,15 +499,15 @@
             });
             //--------------------------------------------------------equalVec3
             function equalVec3(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(3);
-                var v1 = AKFHvector.allocate(3);
-                AKFHvector.putVec3(v0, _in[0], _in[1], _in[2]);
-                AKFHvector.putVec3(v1, _in[3], _in[4], _in[5]);
+                var v0 = AKFHvector32.allocate(3);
+                var v1 = AKFHvector32.allocate(3);
+                AKFHvector32.putVec3(v0, _in[0], _in[1], _in[2]);
+                AKFHvector32.putVec3(v1, _in[3], _in[4], _in[5]);
                 instance.callbackStarted = performance.now();
-                var res = AKFHvector.equalVec3(v0, v1);
+                var res = AKFHvector32.equalVec3(v0, v1);
                 instance.callbackEnded = performance.now();
                 assert.close(res, _out[0], 0.001);
-                AKFHvector.clearHEAP();
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("equalVec3", function(assert, instance) {
                 equalVec3(assert, instance, [3.3, 13.4, 1.5, 3.3, 13.4, 1.5], [1.0]);
@@ -503,15 +515,15 @@
             });
             //--------------------------------------------------------lequalVec3
             function lequalVec3(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(3);
-                var v1 = AKFHvector.allocate(3);
-                AKFHvector.putVec3(v0, _in[0], _in[1], _in[2]);
-                AKFHvector.putVec3(v1, _in[3], _in[4], _in[5]);
+                var v0 = AKFHvector32.allocate(3);
+                var v1 = AKFHvector32.allocate(3);
+                AKFHvector32.putVec3(v0, _in[0], _in[1], _in[2]);
+                AKFHvector32.putVec3(v1, _in[3], _in[4], _in[5]);
                 instance.callbackStarted = performance.now();
-                var res = AKFHvector.lequalVec3(v0, v1);
+                var res = AKFHvector32.lequalVec3(v0, v1);
                 instance.callbackEnded = performance.now();
                 assert.close(res, _out[0], 0.001);
-                AKFHvector.clearHEAP();
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("lequalVec3", function(assert, instance) {
                 lequalVec3(assert, instance, [0.3, 11.4, 0.5, 3.3, 13.4, 1.5], [1.0]);
@@ -519,15 +531,15 @@
             });
             //--------------------------------------------------------gequalVec3
             function gequalVec3(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(3);
-                var v1 = AKFHvector.allocate(3);
-                AKFHvector.putVec3(v0, _in[0], _in[1], _in[2]);
-                AKFHvector.putVec3(v1, _in[3], _in[4], _in[5]);
+                var v0 = AKFHvector32.allocate(3);
+                var v1 = AKFHvector32.allocate(3);
+                AKFHvector32.putVec3(v0, _in[0], _in[1], _in[2]);
+                AKFHvector32.putVec3(v1, _in[3], _in[4], _in[5]);
                 instance.callbackStarted = performance.now();
-                var res = AKFHvector.gequalVec3(v0, v1);
+                var res = AKFHvector32.gequalVec3(v0, v1);
                 instance.callbackEnded = performance.now();
                 assert.close(res, _out[0], 0.001);
-                AKFHvector.clearHEAP();
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("gequalVec3", function(assert, instance) {
                 gequalVec3(assert, instance, [0.3, 11.4, 0.5, 3.3, 13.4, 1.5], [0.0]);
@@ -535,17 +547,17 @@
             });
             //--------------------------------------------------------addVec3
             function addVec3(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(3);
-                var v1 = AKFHvector.allocate(3);
-                AKFHvector.putVec3(v0, _in[0], _in[1], _in[2]);
-                AKFHvector.putVec3(v1, _in[3], _in[4], _in[5]);
+                var v0 = AKFHvector32.allocate(3);
+                var v1 = AKFHvector32.allocate(3);
+                AKFHvector32.putVec3(v0, _in[0], _in[1], _in[2]);
+                AKFHvector32.putVec3(v1, _in[3], _in[4], _in[5]);
                 instance.callbackStarted = performance.now();
-                AKFHvector.addVec3(v0, v1);
+                AKFHvector32.addVec3(v0, v1);
                 instance.callbackEnded = performance.now();
-                assert.close(AKFHvector.fetch(v0, 0), _out[0], 0.001);
-                assert.close(AKFHvector.fetch(v0, 1), _out[1], 0.001);
-                assert.close(AKFHvector.fetch(v0, 2), _out[2], 0.001);
-                AKFHvector.clearHEAP();
+                assert.close(AKFHvector32.fetch(v0, 0), _out[0], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 1), _out[1], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 2), _out[2], 0.001);
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("addVec3", function(assert, instance) {
                 addVec3(assert, instance, [0.33, 11.4, 0.5, 3.3, 13.4, 1.5], [3.63, 24.8, 2.0]);
@@ -553,15 +565,15 @@
             });
             //--------------------------------------------------------addVec3Scalar
             function addVec3Scalar(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(3);
-                AKFHvector.putVec3(v0, _in[0], _in[1], _in[2]);
+                var v0 = AKFHvector32.allocate(3);
+                AKFHvector32.putVec3(v0, _in[0], _in[1], _in[2]);
                 instance.callbackStarted = performance.now();
-                AKFHvector.addVec3Scalar(v0, _in[3]);
+                AKFHvector32.addVec3Scalar(v0, _in[3]);
                 instance.callbackEnded = performance.now();
-                assert.close(AKFHvector.fetch(v0, 0), _out[0], 0.001);
-                assert.close(AKFHvector.fetch(v0, 1), _out[1], 0.001);
-                assert.close(AKFHvector.fetch(v0, 2), _out[2], 0.001);
-                AKFHvector.clearHEAP();
+                assert.close(AKFHvector32.fetch(v0, 0), _out[0], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 1), _out[1], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 2), _out[2], 0.001);
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("addVec3Scalar", function(assert, instance) {
                 addVec3Scalar(assert, instance, [0.33, 11.4, 0.5, 2], [2.33, 13.4, 2.5]);
@@ -569,17 +581,17 @@
             });
             //--------------------------------------------------------subVec3
             function subVec3(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(3);
-                var v1 = AKFHvector.allocate(3);
-                AKFHvector.putVec3(v0, _in[0], _in[1], _in[2]);
-                AKFHvector.putVec3(v1, _in[3], _in[4], _in[5]);
+                var v0 = AKFHvector32.allocate(3);
+                var v1 = AKFHvector32.allocate(3);
+                AKFHvector32.putVec3(v0, _in[0], _in[1], _in[2]);
+                AKFHvector32.putVec3(v1, _in[3], _in[4], _in[5]);
                 instance.callbackStarted = performance.now();
-                AKFHvector.subVec3(v0, v1);
+                AKFHvector32.subVec3(v0, v1);
                 instance.callbackEnded = performance.now();
-                assert.close(AKFHvector.fetch(v0, 0), _out[0], 0.001);
-                assert.close(AKFHvector.fetch(v0, 1), _out[1], 0.001);
-                assert.close(AKFHvector.fetch(v0, 2), _out[2], 0.001);
-                AKFHvector.clearHEAP();
+                assert.close(AKFHvector32.fetch(v0, 0), _out[0], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 1), _out[1], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 2), _out[2], 0.001);
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("subVec3", function(assert, instance) {
                 subVec3(assert, instance, [0.33, 11.4, 0.5, 3.33, 13.4, 1.5], [-3, -2, -1]);
@@ -587,15 +599,15 @@
             });
             //--------------------------------------------------------subVec3Scalar
             function subVec3Scalar(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(3);
-                AKFHvector.putVec3(v0, _in[0], _in[1], _in[2]);
+                var v0 = AKFHvector32.allocate(3);
+                AKFHvector32.putVec3(v0, _in[0], _in[1], _in[2]);
                 instance.callbackStarted = performance.now();
-                AKFHvector.subVec3Scalar(v0, _in[3]);
+                AKFHvector32.subVec3Scalar(v0, _in[3]);
                 instance.callbackEnded = performance.now();
-                assert.close(AKFHvector.fetch(v0, 0), _out[0], 0.001);
-                assert.close(AKFHvector.fetch(v0, 1), _out[1], 0.001);
-                assert.close(AKFHvector.fetch(v0, 2), _out[2], 0.001);
-                AKFHvector.clearHEAP();
+                assert.close(AKFHvector32.fetch(v0, 0), _out[0], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 1), _out[1], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 2), _out[2], 0.001);
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("subVec3Scalar", function(assert, instance) {
                 subVec3Scalar(assert, instance, [0.33, 11.4, 0.5, 2], [-1.67, 9.4, -1.5]);
@@ -603,17 +615,17 @@
             });
             //--------------------------------------------------------mulVec3
             function mulVec3(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(3);
-                var v1 = AKFHvector.allocate(3);
-                AKFHvector.putVec3(v0, _in[0], _in[1], _in[2]);
-                AKFHvector.putVec3(v1, _in[3], _in[4], _in[5]);
+                var v0 = AKFHvector32.allocate(3);
+                var v1 = AKFHvector32.allocate(3);
+                AKFHvector32.putVec3(v0, _in[0], _in[1], _in[2]);
+                AKFHvector32.putVec3(v1, _in[3], _in[4], _in[5]);
                 instance.callbackStarted = performance.now();
-                AKFHvector.mulVec3(v0, v1);
+                AKFHvector32.mulVec3(v0, v1);
                 instance.callbackEnded = performance.now();
-                assert.close(AKFHvector.fetch(v0, 0), _out[0], 0.001);
-                assert.close(AKFHvector.fetch(v0, 1), _out[1], 0.001);
-                assert.close(AKFHvector.fetch(v0, 2), _out[2], 0.001);
-                AKFHvector.clearHEAP();
+                assert.close(AKFHvector32.fetch(v0, 0), _out[0], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 1), _out[1], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 2), _out[2], 0.001);
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("mulVec3", function(assert, instance) {
                 mulVec3(assert, instance, [1, 2, 3, 4, 5, 6], [4, 10, 18]);
@@ -621,15 +633,15 @@
             });
             //--------------------------------------------------------mulVec3Scalar
             function mulVec3Scalar(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(3);
-                AKFHvector.putVec3(v0, _in[0], _in[1], _in[2]);
+                var v0 = AKFHvector32.allocate(3);
+                AKFHvector32.putVec3(v0, _in[0], _in[1], _in[2]);
                 instance.callbackStarted = performance.now();
-                AKFHvector.mulVec3Scalar(v0, _in[3]);
+                AKFHvector32.mulVec3Scalar(v0, _in[3]);
                 instance.callbackEnded = performance.now();
-                assert.close(AKFHvector.fetch(v0, 0), _out[0], 0.001);
-                assert.close(AKFHvector.fetch(v0, 1), _out[1], 0.001);
-                assert.close(AKFHvector.fetch(v0, 2), _out[2], 0.001);
-                AKFHvector.clearHEAP();
+                assert.close(AKFHvector32.fetch(v0, 0), _out[0], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 1), _out[1], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 2), _out[2], 0.001);
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("mulVec3Scalar", function(assert, instance) {
                 mulVec3Scalar(assert, instance, [0.33, 11.4, 0.5, 2], [0.66, 22.8, 1.0]);
@@ -637,17 +649,17 @@
             });
             //--------------------------------------------------------divVec3
             function divVec3(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(3);
-                var v1 = AKFHvector.allocate(3);
-                AKFHvector.putVec3(v0, _in[0], _in[1], _in[2]);
-                AKFHvector.putVec3(v1, _in[3], _in[4], _in[5]);
+                var v0 = AKFHvector32.allocate(3);
+                var v1 = AKFHvector32.allocate(3);
+                AKFHvector32.putVec3(v0, _in[0], _in[1], _in[2]);
+                AKFHvector32.putVec3(v1, _in[3], _in[4], _in[5]);
                 instance.callbackStarted = performance.now();
-                AKFHvector.divVec3(v0, v1);
+                AKFHvector32.divVec3(v0, v1);
                 instance.callbackEnded = performance.now();
-                assert.close(AKFHvector.fetch(v0, 0), _out[0], 0.001);
-                assert.close(AKFHvector.fetch(v0, 1), _out[1], 0.001);
-                assert.close(AKFHvector.fetch(v0, 2), _out[2], 0.001);
-                AKFHvector.clearHEAP();
+                assert.close(AKFHvector32.fetch(v0, 0), _out[0], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 1), _out[1], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 2), _out[2], 0.001);
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("divVec3", function(assert, instance) {
                 divVec3(assert, instance, [1, 2, 3, 4, 5, 6], [0.25, 0.4, 0.5]);
@@ -655,15 +667,15 @@
             });
             //--------------------------------------------------------divVec3Scalar
             function divVec3Scalar(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(3);
-                AKFHvector.putVec3(v0, _in[0], _in[1], _in[2]);
+                var v0 = AKFHvector32.allocate(3);
+                AKFHvector32.putVec3(v0, _in[0], _in[1], _in[2]);
                 instance.callbackStarted = performance.now();
-                AKFHvector.divVec3Scalar(v0, _in[3]);
+                AKFHvector32.divVec3Scalar(v0, _in[3]);
                 instance.callbackEnded = performance.now();
-                assert.close(AKFHvector.fetch(v0, 0), _out[0], 0.001);
-                assert.close(AKFHvector.fetch(v0, 1), _out[1], 0.001);
-                assert.close(AKFHvector.fetch(v0, 2), _out[2], 0.001);
-                AKFHvector.clearHEAP();
+                assert.close(AKFHvector32.fetch(v0, 0), _out[0], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 1), _out[1], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 2), _out[2], 0.001);
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("divVec3Scalar", function(assert, instance) {
                 divVec3Scalar(assert, instance, [0.33, 11.4, 0.5, 2], [0.165, 5.7, 0.25]);
@@ -671,15 +683,15 @@
             });
             //--------------------------------------------------------floorVec3
             function floorVec3(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(3);
-                AKFHvector.putVec3(v0, _in[0], _in[1], _in[2]);
+                var v0 = AKFHvector32.allocate(3);
+                AKFHvector32.putVec3(v0, _in[0], _in[1], _in[2]);
                 instance.callbackStarted = performance.now();
-                AKFHvector.floorVec3(v0);
+                AKFHvector32.floorVec3(v0);
                 instance.callbackEnded = performance.now();
-                assert.close(AKFHvector.fetch(v0, 0), _out[0], 0.001);
-                assert.close(AKFHvector.fetch(v0, 1), _out[1], 0.001);
-                assert.close(AKFHvector.fetch(v0, 2), _out[2], 0.001);
-                AKFHvector.clearHEAP();
+                assert.close(AKFHvector32.fetch(v0, 0), _out[0], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 1), _out[1], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 2), _out[2], 0.001);
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("floorVec3", function(assert, instance) {
                 floorVec3(assert, instance, [0.33, 11.4, 0.5], [0, 11, 0]);
@@ -687,15 +699,15 @@
             });
             //--------------------------------------------------------ceilVec3
             function ceilVec3(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(3);
-                AKFHvector.putVec3(v0, _in[0], _in[1], _in[2]);
+                var v0 = AKFHvector32.allocate(3);
+                AKFHvector32.putVec3(v0, _in[0], _in[1], _in[2]);
                 instance.callbackStarted = performance.now();
-                AKFHvector.ceilVec3(v0);
+                AKFHvector32.ceilVec3(v0);
                 instance.callbackEnded = performance.now();
-                assert.close(AKFHvector.fetch(v0, 0), _out[0], 0.001);
-                assert.close(AKFHvector.fetch(v0, 1), _out[1], 0.001);
-                assert.close(AKFHvector.fetch(v0, 2), _out[2], 0.001);
-                AKFHvector.clearHEAP();
+                assert.close(AKFHvector32.fetch(v0, 0), _out[0], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 1), _out[1], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 2), _out[2], 0.001);
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("ceilVec3", function(assert, instance) {
                 ceilVec3(assert, instance, [0.33, 11.4, 0.5], [1, 12, 1]);
@@ -703,15 +715,15 @@
             });
             //--------------------------------------------------------negateVec3
             function negateVec3(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(3);
-                AKFHvector.putVec3(v0, _in[0], _in[1], _in[2]);
+                var v0 = AKFHvector32.allocate(3);
+                AKFHvector32.putVec3(v0, _in[0], _in[1], _in[2]);
                 instance.callbackStarted = performance.now();
-                AKFHvector.negateVec3(v0);
+                AKFHvector32.negateVec3(v0);
                 instance.callbackEnded = performance.now();
-                assert.close(AKFHvector.fetch(v0, 0), _out[0], 0.001);
-                assert.close(AKFHvector.fetch(v0, 1), _out[1], 0.001);
-                assert.close(AKFHvector.fetch(v0, 2), _out[2], 0.001);
-                AKFHvector.clearHEAP();
+                assert.close(AKFHvector32.fetch(v0, 0), _out[0], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 1), _out[1], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 2), _out[2], 0.001);
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("negateVec3", function(assert, instance) {
                 negateVec3(assert, instance, [0.33, 11.4, 0.5], [-0.33, -11.4, -0.5]);
@@ -719,15 +731,15 @@
             });
             //--------------------------------------------------------dotVec3
             function dotVec3(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(3);
-                var v1 = AKFHvector.allocate(3);
-                AKFHvector.putVec3(v0, _in[0], _in[1], _in[2]);
-                AKFHvector.putVec3(v1, _in[3], _in[4], _in[5]);
+                var v0 = AKFHvector32.allocate(3);
+                var v1 = AKFHvector32.allocate(3);
+                AKFHvector32.putVec3(v0, _in[0], _in[1], _in[2]);
+                AKFHvector32.putVec3(v1, _in[3], _in[4], _in[5]);
                 instance.callbackStarted = performance.now();
-                var res = AKFHvector.dotVec3(v0, v1);
+                var res = AKFHvector32.dotVec3(v0, v1);
                 instance.callbackEnded = performance.now();
                 assert.close(res, _out[0], 0.001);
-                AKFHvector.clearHEAP();
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("dotVec3", function(assert, instance) {
                 dotVec3(assert, instance, [1, 2, 3, 4, 5, 6], [32]);
@@ -735,17 +747,17 @@
             });
             //--------------------------------------------------------crossVec3
             function crossVec3(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(3);
-                var v1 = AKFHvector.allocate(3);
-                AKFHvector.putVec3(v0, _in[0], _in[1], _in[2]);
-                AKFHvector.putVec3(v1, _in[3], _in[4], _in[5]);
+                var v0 = AKFHvector32.allocate(3);
+                var v1 = AKFHvector32.allocate(3);
+                AKFHvector32.putVec3(v0, _in[0], _in[1], _in[2]);
+                AKFHvector32.putVec3(v1, _in[3], _in[4], _in[5]);
                 instance.callbackStarted = performance.now();
-                AKFHvector.crossVec3(v0, v1);
+                AKFHvector32.crossVec3(v0, v1);
                 instance.callbackEnded = performance.now();
-                assert.close(AKFHvector.fetch(v0, 0), _out[0], 0.001);
-                assert.close(AKFHvector.fetch(v0, 1), _out[1], 0.001);
-                assert.close(AKFHvector.fetch(v0, 2), _out[2], 0.001);
-                AKFHvector.clearHEAP();
+                assert.close(AKFHvector32.fetch(v0, 0), _out[0], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 1), _out[1], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 2), _out[2], 0.001);
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("crossVec3", function(assert, instance) {
                 crossVec3(assert, instance, [0, 0, 5, 5, 0, 0], [0, 25, 0]);
@@ -753,17 +765,17 @@
             });
             //--------------------------------------------------------lerpVec3
             function lerpVec3(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(3);
-                var v1 = AKFHvector.allocate(3);
-                AKFHvector.putVec3(v0, _in[0], _in[1], _in[2]);
-                AKFHvector.putVec3(v1, _in[3], _in[4], _in[5]);
+                var v0 = AKFHvector32.allocate(3);
+                var v1 = AKFHvector32.allocate(3);
+                AKFHvector32.putVec3(v0, _in[0], _in[1], _in[2]);
+                AKFHvector32.putVec3(v1, _in[3], _in[4], _in[5]);
                 instance.callbackStarted = performance.now();
-                AKFHvector.lerpVec3(v0, v1, _in[6]);
+                AKFHvector32.lerpVec3(v0, v1, _in[6]);
                 instance.callbackEnded = performance.now();
-                assert.close(AKFHvector.fetch(v0, 0), _out[0], 0.001);
-                assert.close(AKFHvector.fetch(v0, 1), _out[1], 0.001);
-                assert.close(AKFHvector.fetch(v0, 2), _out[2], 0.001);
-                AKFHvector.clearHEAP();
+                assert.close(AKFHvector32.fetch(v0, 0), _out[0], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 1), _out[1], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 2), _out[2], 0.001);
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("lerpVec3", function(assert, instance) {
                 lerpVec3(assert, instance, [1, 2, 3, 10, 20, 30, 0.5], [5.5, 11, 16.5]);
@@ -771,13 +783,13 @@
             });
             //--------------------------------------------------------lengthSqVec3
             function lengthSqVec3(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(3);
-                AKFHvector.putVec3(v0, _in[0], _in[1], _in[2]);
+                var v0 = AKFHvector32.allocate(3);
+                AKFHvector32.putVec3(v0, _in[0], _in[1], _in[2]);
                 instance.callbackStarted = performance.now();
-                var res = AKFHvector.lengthSqVec3(v0);
+                var res = AKFHvector32.lengthSqVec3(v0);
                 instance.callbackEnded = performance.now();
                 assert.close(res, _out[0], 0.001);
-                AKFHvector.clearHEAP();
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("lengthSqVec3", function(assert, instance) {
                 lengthSqVec3(assert, instance, [1, 2, 3], [14]);
@@ -785,13 +797,13 @@
             });
             //--------------------------------------------------------lengthVec3
             function lengthVec3(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(3);
-                AKFHvector.putVec3(v0, _in[0], _in[1], _in[2]);
+                var v0 = AKFHvector32.allocate(3);
+                AKFHvector32.putVec3(v0, _in[0], _in[1], _in[2]);
                 instance.callbackStarted = performance.now();
-                var res = AKFHvector.lengthVec3(v0);
+                var res = AKFHvector32.lengthVec3(v0);
                 instance.callbackEnded = performance.now();
                 assert.close(res, _out[0], 0.001);
-                AKFHvector.clearHEAP();
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("lengthVec3", function(assert, instance) {
                 lengthVec3(assert, instance, [1, 2, 3], [3.7416573867739413]);
@@ -799,15 +811,15 @@
             });
             //--------------------------------------------------------distanceVec3
             function distanceVec3(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(3);
-                var v1 = AKFHvector.allocate(3);
-                AKFHvector.putVec3(v0, _in[0], _in[1], _in[2]);
-                AKFHvector.putVec3(v1, _in[3], _in[4], _in[5]);
+                var v0 = AKFHvector32.allocate(3);
+                var v1 = AKFHvector32.allocate(3);
+                AKFHvector32.putVec3(v0, _in[0], _in[1], _in[2]);
+                AKFHvector32.putVec3(v1, _in[3], _in[4], _in[5]);
                 instance.callbackStarted = performance.now();
-                var res = AKFHvector.distanceVec3(v0, v1);
+                var res = AKFHvector32.distanceVec3(v0, v1);
                 instance.callbackEnded = performance.now();
                 assert.close(res, _out[0], 0.001);
-                AKFHvector.clearHEAP();
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("distanceVec3", function(assert, instance) {
                 distanceVec3(assert, instance, [1, 2, 3, 1, 2, 3], [0]);
@@ -815,13 +827,13 @@
             });
             //--------------------------------------------------------lengthManVec3
             function lengthManVec3(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(3);
-                AKFHvector.putVec3(v0, _in[0], _in[1], _in[2]);
+                var v0 = AKFHvector32.allocate(3);
+                AKFHvector32.putVec3(v0, _in[0], _in[1], _in[2]);
                 instance.callbackStarted = performance.now();
-                var res = AKFHvector.lengthManVec3(v0);
+                var res = AKFHvector32.lengthManVec3(v0);
                 instance.callbackEnded = performance.now();
                 assert.close(res, _out[0], 0.001);
-                AKFHvector.clearHEAP();
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("lengthManVec3", function(assert, instance) {
                 lengthManVec3(assert, instance, [1, 2, 3], [6]);
@@ -829,15 +841,15 @@
             });
             //--------------------------------------------------------normalizeVec3
             function normalizeVec3(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(3);
-                AKFHvector.putVec3(v0, _in[0], _in[1], _in[2]);
+                var v0 = AKFHvector32.allocate(3);
+                AKFHvector32.putVec3(v0, _in[0], _in[1], _in[2]);
                 instance.callbackStarted = performance.now();
-                AKFHvector.normalizeVec3(v0);
+                AKFHvector32.normalizeVec3(v0);
                 instance.callbackEnded = performance.now();
-                assert.close(AKFHvector.fetch(v0, 0), _out[0], 0.001);
-                assert.close(AKFHvector.fetch(v0, 1), _out[1], 0.001);
-                assert.close(AKFHvector.fetch(v0, 2), _out[2], 0.001);
-                AKFHvector.clearHEAP();
+                assert.close(AKFHvector32.fetch(v0, 0), _out[0], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 1), _out[1], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 2), _out[2], 0.001);
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("normalizeVec3", function(assert, instance) {
                 normalizeVec3(assert, instance, [1, 2, 3], [0.2672612419124244, 0.5345224838248488, 0.8017837257372732]);
@@ -848,15 +860,15 @@
             QUnit.module("Vec4");
             //--------------------------------------------------------putVector4
             function putVector4(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(4);
+                var v0 = AKFHvector32.allocate(4);
                 instance.callbackStarted = performance.now();
-                AKFHvector.putVec4(v0, _in[0], _in[1], _in[2], _in[3]);
+                AKFHvector32.putVec4(v0, _in[0], _in[1], _in[2], _in[3]);
                 instance.callbackEnded = performance.now();
-                assert.close(AKFHvector.fetch(v0, 0), _out[0], 0.001);
-                assert.close(AKFHvector.fetch(v0, 1), _out[1], 0.001);
-                assert.close(AKFHvector.fetch(v0, 2), _out[2], 0.001);
-                assert.close(AKFHvector.fetch(v0, 3), _out[3], 0.001);
-                AKFHvector.clearHEAP();
+                assert.close(AKFHvector32.fetch(v0, 0), _out[0], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 1), _out[1], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 2), _out[2], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 3), _out[3], 0.001);
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("putVector4", function(assert, instance) {
                 putVector4(assert, instance, [3.3, 13.4, 1.5, 1.0], [3.3, 13.4, 1.5, 1.0]);
@@ -864,17 +876,17 @@
             });
             //--------------------------------------------------------copyVec4
             function copyVec4(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(4);
-                var v1 = AKFHvector.allocate(4);
-                AKFHvector.putVec4(v0, _in[0], _in[1], _in[2], _in[3]);
+                var v0 = AKFHvector32.allocate(4);
+                var v1 = AKFHvector32.allocate(4);
+                AKFHvector32.putVec4(v0, _in[0], _in[1], _in[2], _in[3]);
                 instance.callbackStarted = performance.now();
-                AKFHvector.copyVec4(v1, v0);
+                AKFHvector32.copyVec4(v1, v0);
                 instance.callbackEnded = performance.now();
-                assert.close(AKFHvector.fetch(v1, 0), _out[0], 0.001);
-                assert.close(AKFHvector.fetch(v1, 1), _out[1], 0.001);
-                assert.close(AKFHvector.fetch(v1, 2), _out[2], 0.001);
-                assert.close(AKFHvector.fetch(v1, 3), _out[3], 0.001);
-                AKFHvector.clearHEAP();
+                assert.close(AKFHvector32.fetch(v1, 0), _out[0], 0.001);
+                assert.close(AKFHvector32.fetch(v1, 1), _out[1], 0.001);
+                assert.close(AKFHvector32.fetch(v1, 2), _out[2], 0.001);
+                assert.close(AKFHvector32.fetch(v1, 3), _out[3], 0.001);
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("copyVec4", function(assert, instance) {
                 copyVec4(assert, instance, [3.3, 13.4, 1.5, 1.0], [3.3, 13.4, 1.5, 1.0]);
@@ -882,16 +894,16 @@
             });
             //--------------------------------------------------------getVector4
             function getVector4(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(4);
-                AKFHvector.putVec4(v0, _in[0], _in[1], _in[2], _in[3]);
+                var v0 = AKFHvector32.allocate(4);
+                AKFHvector32.putVec4(v0, _in[0], _in[1], _in[2], _in[3]);
                 instance.callbackStarted = performance.now();
-                var res = AKFHvector.getVector(v0, 4);
+                var res = AKFHvector32.getVector(v0, 4);
                 instance.callbackEnded = performance.now();
                 assert.close(res[0], _out[0], 0.001);
                 assert.close(res[1], _out[1], 0.001);
                 assert.close(res[2], _out[2], 0.001);
                 assert.close(res[3], _out[3], 0.001);
-                AKFHvector.clearHEAP();
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("getVector4", function(assert, instance) {
                 getVector4(assert, instance, [3.3, 13.4, 1.5, 1.0], [3.3, 13.4, 1.5, 1.0]);
@@ -899,15 +911,15 @@
             });
             //--------------------------------------------------------equalVec4
             function equalVec4(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(4);
-                var v1 = AKFHvector.allocate(4);
-                AKFHvector.putVec4(v0, _in[0], _in[1], _in[2], _in[3]);
-                AKFHvector.putVec4(v1, _in[4], _in[5], _in[6], _in[7]);
+                var v0 = AKFHvector32.allocate(4);
+                var v1 = AKFHvector32.allocate(4);
+                AKFHvector32.putVec4(v0, _in[0], _in[1], _in[2], _in[3]);
+                AKFHvector32.putVec4(v1, _in[4], _in[5], _in[6], _in[7]);
                 instance.callbackStarted = performance.now();
-                var res = AKFHvector.equalVec4(v0, v1);
+                var res = AKFHvector32.equalVec4(v0, v1);
                 instance.callbackEnded = performance.now();
                 assert.close(res, _out[0], 0.001);
-                AKFHvector.clearHEAP();
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("equalVec4", function(assert, instance) {
                 equalVec4(assert, instance, [3.3, 13.4, 1.5, 1.0, 3.3, 13.4, 1.5, 1.0], [1.0]);
@@ -915,15 +927,15 @@
             });
             //--------------------------------------------------------lequalVec4
             function lequalVec4(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(4);
-                var v1 = AKFHvector.allocate(4);
-                AKFHvector.putVec4(v0, _in[0], _in[1], _in[2], _in[3]);
-                AKFHvector.putVec4(v1, _in[4], _in[5], _in[6], _in[7]);
+                var v0 = AKFHvector32.allocate(4);
+                var v1 = AKFHvector32.allocate(4);
+                AKFHvector32.putVec4(v0, _in[0], _in[1], _in[2], _in[3]);
+                AKFHvector32.putVec4(v1, _in[4], _in[5], _in[6], _in[7]);
                 instance.callbackStarted = performance.now();
-                var res = AKFHvector.lequalVec4(v0, v1);
+                var res = AKFHvector32.lequalVec4(v0, v1);
                 instance.callbackEnded = performance.now();
                 assert.close(res, _out[0], 0.001);
-                AKFHvector.clearHEAP();
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("lequalVec4", function(assert, instance) {
                 lequalVec4(assert, instance, [0.3, 11.4, 0.5, 1.0, 3.3, 13.4, 1.5, 1.1], [1.0]);
@@ -931,15 +943,15 @@
             });
             //--------------------------------------------------------gequalVec4
             function gequalVec4(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(4);
-                var v1 = AKFHvector.allocate(4);
-                AKFHvector.putVec4(v0, _in[0], _in[1], _in[2], _in[3]);
-                AKFHvector.putVec4(v1, _in[4], _in[5], _in[6], _in[7]);
+                var v0 = AKFHvector32.allocate(4);
+                var v1 = AKFHvector32.allocate(4);
+                AKFHvector32.putVec4(v0, _in[0], _in[1], _in[2], _in[3]);
+                AKFHvector32.putVec4(v1, _in[4], _in[5], _in[6], _in[7]);
                 instance.callbackStarted = performance.now();
-                var res = AKFHvector.gequalVec4(v0, v1);
+                var res = AKFHvector32.gequalVec4(v0, v1);
                 instance.callbackEnded = performance.now();
                 assert.close(res, _out[0], 0.001);
-                AKFHvector.clearHEAP();
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("gequalVec4", function(assert, instance) {
                 gequalVec4(assert, instance, [0.3, 11.4, 0.5, 1.0, 3.3, 13.4, 1.5, 0.1], [0.0]);
@@ -947,18 +959,18 @@
             });
             //--------------------------------------------------------addVec4
             function addVec4(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(4);
-                var v1 = AKFHvector.allocate(4);
-                AKFHvector.putVec4(v0, _in[0], _in[1], _in[2], _in[3]);
-                AKFHvector.putVec4(v1, _in[4], _in[5], _in[6], _in[7]);
+                var v0 = AKFHvector32.allocate(4);
+                var v1 = AKFHvector32.allocate(4);
+                AKFHvector32.putVec4(v0, _in[0], _in[1], _in[2], _in[3]);
+                AKFHvector32.putVec4(v1, _in[4], _in[5], _in[6], _in[7]);
                 instance.callbackStarted = performance.now();
-                AKFHvector.addVec4(v0, v1);
+                AKFHvector32.addVec4(v0, v1);
                 instance.callbackEnded = performance.now();
-                assert.close(AKFHvector.fetch(v0, 0), _out[0], 0.001);
-                assert.close(AKFHvector.fetch(v0, 1), _out[1], 0.001);
-                assert.close(AKFHvector.fetch(v0, 2), _out[2], 0.001);
-                assert.close(AKFHvector.fetch(v0, 3), _out[3], 0.001);
-                AKFHvector.clearHEAP();
+                assert.close(AKFHvector32.fetch(v0, 0), _out[0], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 1), _out[1], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 2), _out[2], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 3), _out[3], 0.001);
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("addVec4", function(assert, instance) {
                 addVec4(assert, instance, [0.33, 11.4, 0.5, 6, 3.3, 13.4, 1.5, 6], [3.63, 24.8, 2.0, 12.0]);
@@ -966,16 +978,16 @@
             });
             //--------------------------------------------------------addVec4Scalar
             function addVec4Scalar(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(4);
-                AKFHvector.putVec4(v0, _in[0], _in[1], _in[2], _in[3]);
+                var v0 = AKFHvector32.allocate(4);
+                AKFHvector32.putVec4(v0, _in[0], _in[1], _in[2], _in[3]);
                 instance.callbackStarted = performance.now();
-                AKFHvector.addVec4Scalar(v0, _in[4]);
+                AKFHvector32.addVec4Scalar(v0, _in[4]);
                 instance.callbackEnded = performance.now();
-                assert.close(AKFHvector.fetch(v0, 0), _out[0], 0.001);
-                assert.close(AKFHvector.fetch(v0, 1), _out[1], 0.001);
-                assert.close(AKFHvector.fetch(v0, 2), _out[2], 0.001);
-                assert.close(AKFHvector.fetch(v0, 3), _out[3], 0.001);
-                AKFHvector.clearHEAP();
+                assert.close(AKFHvector32.fetch(v0, 0), _out[0], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 1), _out[1], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 2), _out[2], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 3), _out[3], 0.001);
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("addVec4Scalar", function(assert, instance) {
                 addVec4Scalar(assert, instance, [0.33, 11.4, 0.5, 4, 2], [2.33, 13.4, 2.5, 6]);
@@ -983,18 +995,18 @@
             });
             //--------------------------------------------------------subVec4
             function subVec4(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(4);
-                var v1 = AKFHvector.allocate(4);
-                AKFHvector.putVec4(v0, _in[0], _in[1], _in[2], _in[3]);
-                AKFHvector.putVec4(v1, _in[4], _in[5], _in[6], _in[7]);
+                var v0 = AKFHvector32.allocate(4);
+                var v1 = AKFHvector32.allocate(4);
+                AKFHvector32.putVec4(v0, _in[0], _in[1], _in[2], _in[3]);
+                AKFHvector32.putVec4(v1, _in[4], _in[5], _in[6], _in[7]);
                 instance.callbackStarted = performance.now();
-                AKFHvector.subVec4(v0, v1);
+                AKFHvector32.subVec4(v0, v1);
                 instance.callbackEnded = performance.now();
-                assert.close(AKFHvector.fetch(v0, 0), _out[0], 0.001);
-                assert.close(AKFHvector.fetch(v0, 1), _out[1], 0.001);
-                assert.close(AKFHvector.fetch(v0, 2), _out[2], 0.001);
-                assert.close(AKFHvector.fetch(v0, 3), _out[3], 0.001);
-                AKFHvector.clearHEAP();
+                assert.close(AKFHvector32.fetch(v0, 0), _out[0], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 1), _out[1], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 2), _out[2], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 3), _out[3], 0.001);
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("subVec4", function(assert, instance) {
                 subVec4(assert, instance, [0.33, 11.4, 0.5, 4, 3.33, 13.4, 1.5, 4], [-3, -2, -1, 0]);
@@ -1002,16 +1014,16 @@
             });
             //--------------------------------------------------------subVec4Scalar
             function subVec4Scalar(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(4);
-                AKFHvector.putVec4(v0, _in[0], _in[1], _in[2], _in[3]);
+                var v0 = AKFHvector32.allocate(4);
+                AKFHvector32.putVec4(v0, _in[0], _in[1], _in[2], _in[3]);
                 instance.callbackStarted = performance.now();
-                AKFHvector.subVec4Scalar(v0, _in[4]);
+                AKFHvector32.subVec4Scalar(v0, _in[4]);
                 instance.callbackEnded = performance.now();
-                assert.close(AKFHvector.fetch(v0, 0), _out[0], 0.001);
-                assert.close(AKFHvector.fetch(v0, 1), _out[1], 0.001);
-                assert.close(AKFHvector.fetch(v0, 2), _out[2], 0.001);
-                assert.close(AKFHvector.fetch(v0, 3), _out[3], 0.001);
-                AKFHvector.clearHEAP();
+                assert.close(AKFHvector32.fetch(v0, 0), _out[0], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 1), _out[1], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 2), _out[2], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 3), _out[3], 0.001);
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("subVec4Scalar", function(assert, instance) {
                 subVec4Scalar(assert, instance, [0.33, 11.4, 0.5, 3, 2], [-1.67, 9.4, -1.5, 1]);
@@ -1019,18 +1031,18 @@
             });
             //--------------------------------------------------------mulVec4
             function mulVec4(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(4);
-                var v1 = AKFHvector.allocate(4);
-                AKFHvector.putVec4(v0, _in[0], _in[1], _in[2], _in[3]);
-                AKFHvector.putVec4(v1, _in[4], _in[5], _in[6], _in[7]);
+                var v0 = AKFHvector32.allocate(4);
+                var v1 = AKFHvector32.allocate(4);
+                AKFHvector32.putVec4(v0, _in[0], _in[1], _in[2], _in[3]);
+                AKFHvector32.putVec4(v1, _in[4], _in[5], _in[6], _in[7]);
                 instance.callbackStarted = performance.now();
-                AKFHvector.mulVec4(v0, v1);
+                AKFHvector32.mulVec4(v0, v1);
                 instance.callbackEnded = performance.now();
-                assert.close(AKFHvector.fetch(v0, 0), _out[0], 0.001);
-                assert.close(AKFHvector.fetch(v0, 1), _out[1], 0.001);
-                assert.close(AKFHvector.fetch(v0, 2), _out[2], 0.001);
-                assert.close(AKFHvector.fetch(v0, 3), _out[3], 0.001);
-                AKFHvector.clearHEAP();
+                assert.close(AKFHvector32.fetch(v0, 0), _out[0], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 1), _out[1], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 2), _out[2], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 3), _out[3], 0.001);
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("mulVec4", function(assert, instance) {
                 mulVec4(assert, instance, [1, 2, 3, 7, 4, 5, 6, 8], [4, 10, 18, 56]);
@@ -1038,16 +1050,16 @@
             });
             //--------------------------------------------------------mulVec4Scalar
             function mulVec4Scalar(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(4);
-                AKFHvector.putVec4(v0, _in[0], _in[1], _in[2], _in[3]);
+                var v0 = AKFHvector32.allocate(4);
+                AKFHvector32.putVec4(v0, _in[0], _in[1], _in[2], _in[3]);
                 instance.callbackStarted = performance.now();
-                AKFHvector.mulVec4Scalar(v0, _in[4]);
+                AKFHvector32.mulVec4Scalar(v0, _in[4]);
                 instance.callbackEnded = performance.now();
-                assert.close(AKFHvector.fetch(v0, 0), _out[0], 0.001);
-                assert.close(AKFHvector.fetch(v0, 1), _out[1], 0.001);
-                assert.close(AKFHvector.fetch(v0, 2), _out[2], 0.001);
-                assert.close(AKFHvector.fetch(v0, 3), _out[3], 0.001);
-                AKFHvector.clearHEAP();
+                assert.close(AKFHvector32.fetch(v0, 0), _out[0], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 1), _out[1], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 2), _out[2], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 3), _out[3], 0.001);
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("mulVec4Scalar", function(assert, instance) {
                 mulVec4Scalar(assert, instance, [0.33, 11.4, 0.5, 6, 2], [0.66, 22.8, 1.0, 12]);
@@ -1055,18 +1067,18 @@
             });
             //--------------------------------------------------------divVec4
             function divVec4(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(4);
-                var v1 = AKFHvector.allocate(4);
-                AKFHvector.putVec4(v0, _in[0], _in[1], _in[2], _in[3]);
-                AKFHvector.putVec4(v1, _in[4], _in[5], _in[6], _in[7]);
+                var v0 = AKFHvector32.allocate(4);
+                var v1 = AKFHvector32.allocate(4);
+                AKFHvector32.putVec4(v0, _in[0], _in[1], _in[2], _in[3]);
+                AKFHvector32.putVec4(v1, _in[4], _in[5], _in[6], _in[7]);
                 instance.callbackStarted = performance.now();
-                AKFHvector.divVec4(v0, v1);
+                AKFHvector32.divVec4(v0, v1);
                 instance.callbackEnded = performance.now();
-                assert.close(AKFHvector.fetch(v0, 0), _out[0], 0.001);
-                assert.close(AKFHvector.fetch(v0, 1), _out[1], 0.001);
-                assert.close(AKFHvector.fetch(v0, 2), _out[2], 0.001);
-                assert.close(AKFHvector.fetch(v0, 3), _out[3], 0.001);
-                AKFHvector.clearHEAP();
+                assert.close(AKFHvector32.fetch(v0, 0), _out[0], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 1), _out[1], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 2), _out[2], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 3), _out[3], 0.001);
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("divVec4", function(assert, instance) {
                 divVec4(assert, instance, [1, 2, 3, 7, 4, 5, 6, 8], [0.25, 0.4, 0.5, 0.875]);
@@ -1074,16 +1086,16 @@
             });
             //--------------------------------------------------------divVec4Scalar
             function divVec4Scalar(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(4);
-                AKFHvector.putVec4(v0, _in[0], _in[1], _in[2], _in[3]);
+                var v0 = AKFHvector32.allocate(4);
+                AKFHvector32.putVec4(v0, _in[0], _in[1], _in[2], _in[3]);
                 instance.callbackStarted = performance.now();
-                AKFHvector.divVec4Scalar(v0, _in[4]);
+                AKFHvector32.divVec4Scalar(v0, _in[4]);
                 instance.callbackEnded = performance.now();
-                assert.close(AKFHvector.fetch(v0, 0), _out[0], 0.001);
-                assert.close(AKFHvector.fetch(v0, 1), _out[1], 0.001);
-                assert.close(AKFHvector.fetch(v0, 2), _out[2], 0.001);
-                assert.close(AKFHvector.fetch(v0, 3), _out[3], 0.001);
-                AKFHvector.clearHEAP();
+                assert.close(AKFHvector32.fetch(v0, 0), _out[0], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 1), _out[1], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 2), _out[2], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 3), _out[3], 0.001);
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("divVec4Scalar", function(assert, instance) {
                 divVec4Scalar(assert, instance, [0.33, 11.4, 0.5, 6, 2], [0.165, 5.7, 0.25, 3]);
@@ -1091,16 +1103,16 @@
             });
             //--------------------------------------------------------floorVec4
             function floorVec4(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(4);
-                AKFHvector.putVec4(v0, _in[0], _in[1], _in[2], _in[3]);
+                var v0 = AKFHvector32.allocate(4);
+                AKFHvector32.putVec4(v0, _in[0], _in[1], _in[2], _in[3]);
                 instance.callbackStarted = performance.now();
-                AKFHvector.floorVec4(v0);
+                AKFHvector32.floorVec4(v0);
                 instance.callbackEnded = performance.now();
-                assert.close(AKFHvector.fetch(v0, 0), _out[0], 0.001);
-                assert.close(AKFHvector.fetch(v0, 1), _out[1], 0.001);
-                assert.close(AKFHvector.fetch(v0, 2), _out[2], 0.001);
-                assert.close(AKFHvector.fetch(v0, 3), _out[3], 0.001);
-                AKFHvector.clearHEAP();
+                assert.close(AKFHvector32.fetch(v0, 0), _out[0], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 1), _out[1], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 2), _out[2], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 3), _out[3], 0.001);
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("floorVec4", function(assert, instance) {
                 floorVec4(assert, instance, [0.33, 11.4, 0.5, 978.99], [0, 11, 0, 978]);
@@ -1108,16 +1120,16 @@
             });
             //--------------------------------------------------------ceilVec4
             function ceilVec4(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(4);
-                AKFHvector.putVec4(v0, _in[0], _in[1], _in[2], _in[3]);
+                var v0 = AKFHvector32.allocate(4);
+                AKFHvector32.putVec4(v0, _in[0], _in[1], _in[2], _in[3]);
                 instance.callbackStarted = performance.now();
-                AKFHvector.ceilVec4(v0);
+                AKFHvector32.ceilVec4(v0);
                 instance.callbackEnded = performance.now();
-                assert.close(AKFHvector.fetch(v0, 0), _out[0], 0.001);
-                assert.close(AKFHvector.fetch(v0, 1), _out[1], 0.001);
-                assert.close(AKFHvector.fetch(v0, 2), _out[2], 0.001);
-                assert.close(AKFHvector.fetch(v0, 3), _out[3], 0.001);
-                AKFHvector.clearHEAP();
+                assert.close(AKFHvector32.fetch(v0, 0), _out[0], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 1), _out[1], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 2), _out[2], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 3), _out[3], 0.001);
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("ceilVec4", function(assert, instance) {
                 ceilVec4(assert, instance, [0.33, 11.4, 0.5, 978.99], [1, 12, 1, 979]);
@@ -1125,16 +1137,16 @@
             });
             //--------------------------------------------------------negateVec4
             function negateVec4(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(4);
-                AKFHvector.putVec4(v0, _in[0], _in[1], _in[2], _in[3]);
+                var v0 = AKFHvector32.allocate(4);
+                AKFHvector32.putVec4(v0, _in[0], _in[1], _in[2], _in[3]);
                 instance.callbackStarted = performance.now();
-                AKFHvector.negateVec4(v0);
+                AKFHvector32.negateVec4(v0);
                 instance.callbackEnded = performance.now();
-                assert.close(AKFHvector.fetch(v0, 0), _out[0], 0.001);
-                assert.close(AKFHvector.fetch(v0, 1), _out[1], 0.001);
-                assert.close(AKFHvector.fetch(v0, 2), _out[2], 0.001);
-                assert.close(AKFHvector.fetch(v0, 3), _out[3], 0.001);
-                AKFHvector.clearHEAP();
+                assert.close(AKFHvector32.fetch(v0, 0), _out[0], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 1), _out[1], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 2), _out[2], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 3), _out[3], 0.001);
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("negateVec4", function(assert, instance) {
                 negateVec4(assert, instance, [0.33, 11.4, 0.5, 978], [-0.33, -11.4, -0.5, -978]);
@@ -1142,15 +1154,15 @@
             });
             //--------------------------------------------------------dotVec4
             function dotVec4(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(4);
-                var v1 = AKFHvector.allocate(4);
-                AKFHvector.putVec4(v0, _in[0], _in[1], _in[2], _in[3]);
-                AKFHvector.putVec4(v1, _in[4], _in[5], _in[6], _in[7]);
+                var v0 = AKFHvector32.allocate(4);
+                var v1 = AKFHvector32.allocate(4);
+                AKFHvector32.putVec4(v0, _in[0], _in[1], _in[2], _in[3]);
+                AKFHvector32.putVec4(v1, _in[4], _in[5], _in[6], _in[7]);
                 instance.callbackStarted = performance.now();
-                var res = AKFHvector.dotVec4(v0, v1);
+                var res = AKFHvector32.dotVec4(v0, v1);
                 instance.callbackEnded = performance.now();
                 assert.close(res, _out[0], 0.001);
-                AKFHvector.clearHEAP();
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("dotVec4", function(assert, instance) {
                 dotVec4(assert, instance, [1, 2, 3, 7, 4, 5, 6, 8], [88]);
@@ -1158,18 +1170,18 @@
             });
             //--------------------------------------------------------lerpVec4
             function lerpVec4(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(4);
-                var v1 = AKFHvector.allocate(4);
-                AKFHvector.putVec4(v0, _in[0], _in[1], _in[2], _in[3]);
-                AKFHvector.putVec4(v1, _in[4], _in[5], _in[6], _in[7]);
+                var v0 = AKFHvector32.allocate(4);
+                var v1 = AKFHvector32.allocate(4);
+                AKFHvector32.putVec4(v0, _in[0], _in[1], _in[2], _in[3]);
+                AKFHvector32.putVec4(v1, _in[4], _in[5], _in[6], _in[7]);
                 instance.callbackStarted = performance.now();
-                AKFHvector.lerpVec4(v0, v1, _in[8]);
+                AKFHvector32.lerpVec4(v0, v1, _in[8]);
                 instance.callbackEnded = performance.now();
-                assert.close(AKFHvector.fetch(v0, 0), _out[0], 0.001);
-                assert.close(AKFHvector.fetch(v0, 1), _out[1], 0.001);
-                assert.close(AKFHvector.fetch(v0, 2), _out[2], 0.001);
-                assert.close(AKFHvector.fetch(v0, 3), _out[3], 0.001);
-                AKFHvector.clearHEAP();
+                assert.close(AKFHvector32.fetch(v0, 0), _out[0], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 1), _out[1], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 2), _out[2], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 3), _out[3], 0.001);
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("lerpVec4", function(assert, instance) {
                 lerpVec4(assert, instance, [1, 2, 3, 4, 10, 20, 30, 40, 0.5], [5.5, 11, 16.5, 22]);
@@ -1177,13 +1189,13 @@
             });
             //--------------------------------------------------------lengthSqVec4
             function lengthSqVec4(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(4);
-                AKFHvector.putVec4(v0, _in[0], _in[1], _in[2], _in[3]);
+                var v0 = AKFHvector32.allocate(4);
+                AKFHvector32.putVec4(v0, _in[0], _in[1], _in[2], _in[3]);
                 instance.callbackStarted = performance.now();
-                var res = AKFHvector.lengthSqVec4(v0);
+                var res = AKFHvector32.lengthSqVec4(v0);
                 instance.callbackEnded = performance.now();
                 assert.close(res, _out[0], 0.001);
-                AKFHvector.clearHEAP();
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("lengthSqVec4", function(assert, instance) {
                 lengthSqVec4(assert, instance, [1, 2, 3, 4], [30]);
@@ -1191,13 +1203,13 @@
             });
             //--------------------------------------------------------lengthVec4
             function lengthVec4(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(4);
-                AKFHvector.putVec4(v0, _in[0], _in[1], _in[2], _in[3]);
+                var v0 = AKFHvector32.allocate(4);
+                AKFHvector32.putVec4(v0, _in[0], _in[1], _in[2], _in[3]);
                 instance.callbackStarted = performance.now();
-                var res = AKFHvector.lengthVec4(v0);
+                var res = AKFHvector32.lengthVec4(v0);
                 instance.callbackEnded = performance.now();
                 assert.close(res, _out[0], 0.001);
-                AKFHvector.clearHEAP();
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("lengthVec4", function(assert, instance) {
                 lengthVec4(assert, instance, [1, 2, 3, 4], [Math.sqrt(30)]);
@@ -1205,15 +1217,15 @@
             });
             //--------------------------------------------------------distanceVec4
             function distanceVec4(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(4);
-                var v1 = AKFHvector.allocate(4);
-                AKFHvector.putVec4(v0, _in[0], _in[1], _in[2], _in[3]);
-                AKFHvector.putVec4(v1, _in[4], _in[5], _in[6], _in[7]);
+                var v0 = AKFHvector32.allocate(4);
+                var v1 = AKFHvector32.allocate(4);
+                AKFHvector32.putVec4(v0, _in[0], _in[1], _in[2], _in[3]);
+                AKFHvector32.putVec4(v1, _in[4], _in[5], _in[6], _in[7]);
                 instance.callbackStarted = performance.now();
-                var res = AKFHvector.distanceVec4(v0, v1);
+                var res = AKFHvector32.distanceVec4(v0, v1);
                 instance.callbackEnded = performance.now();
                 assert.close(res, _out[0], 0.001);
-                AKFHvector.clearHEAP();
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("distanceVec4", function(assert, instance) {
                 distanceVec4(assert, instance, [1, 2, 3, 4, 1, 2, 3, 4], [0]);
@@ -1221,13 +1233,13 @@
             });
             //--------------------------------------------------------lengthManVec4
             function lengthManVec4(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(4);
-                AKFHvector.putVec4(v0, _in[0], _in[1], _in[2], _in[3]);
+                var v0 = AKFHvector32.allocate(4);
+                AKFHvector32.putVec4(v0, _in[0], _in[1], _in[2], _in[3]);
                 instance.callbackStarted = performance.now();
-                var res = AKFHvector.lengthManVec4(v0);
+                var res = AKFHvector32.lengthManVec4(v0);
                 instance.callbackEnded = performance.now();
                 assert.close(res, _out[0], 0.001);
-                AKFHvector.clearHEAP();
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("lengthManVec4", function(assert, instance) {
                 lengthManVec4(assert, instance, [1, 2, 3, 4], [10]);
@@ -1235,16 +1247,16 @@
             });
             //--------------------------------------------------------normalizeVec4
             function normalizeVec4(assert, instance, _in, _out) {
-                var v0 = AKFHvector.allocate(4);
-                AKFHvector.putVec4(v0, _in[0], _in[1], _in[2], _in[3]);
+                var v0 = AKFHvector32.allocate(4);
+                AKFHvector32.putVec4(v0, _in[0], _in[1], _in[2], _in[3]);
                 instance.callbackStarted = performance.now();
-                AKFHvector.normalizeVec4(v0);
+                AKFHvector32.normalizeVec4(v0);
                 instance.callbackEnded = performance.now();
-                assert.close(AKFHvector.fetch(v0, 0), _out[0], 0.001);
-                assert.close(AKFHvector.fetch(v0, 1), _out[1], 0.001);
-                assert.close(AKFHvector.fetch(v0, 2), _out[2], 0.001);
-                assert.close(AKFHvector.fetch(v0, 3), _out[3], 0.001);
-                AKFHvector.clearHEAP();
+                assert.close(AKFHvector32.fetch(v0, 0), _out[0], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 1), _out[1], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 2), _out[2], 0.001);
+                assert.close(AKFHvector32.fetch(v0, 3), _out[3], 0.001);
+                AKFHvector32.clearHEAP();
             }
             QUnit.test("normalizeVec4", function(assert, instance) {
                 normalizeVec4(assert, instance, [1, 2, 3, 4], [1 / Math.sqrt(30), 2 / Math.sqrt(30), 3 / Math.sqrt(30), 4 / Math.sqrt(30)]);
