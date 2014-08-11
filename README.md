@@ -28,3 +28,16 @@ techniques des navigateurs. Il est dans sa première mouture écrit en ASMJS.
 AKFHvector affiche ainsi de très hautes performances.
 
 *Al Kafi-Fil-Hisab (which is sufficient for the calculation)
+
+--
+
+```javascript
+//creates and instantiates a sizing vector 3. An uint value is attributed to myVec3 like pointer.
+var myVec3 = AKFHvector32.allocate(3);
+
+//myVec3 is setted by this following values [0.6, 0.7, 0.8].
+AKFHvector32.putVec3(myVec3, 0.6, 0.7, 0.8);
+
+//An addition on myVec3 is performed by this following values [0.4, 1.0, 2.2]. It equals now at [1.0, 1.7, 3.0].
+AKFHvector32.addVec3(myVec3, 0.4, 1.0, 2.2);
+```
